@@ -1,1 +1,39 @@
+# Environnements virtuels
+venv/
 .venv/
+
+# Fichiers de dépendances
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Dossiers de build et distributions
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Fichiers de logs et caches
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+db.sqlite3
+
+# Configuration IDE / éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Tests
+.coverage
+.tox/
+nosetests.xml
+coverage.xml
+.pytest_cache/
+
+# OS-specific
+.DS_Store
+Thumbs.db
