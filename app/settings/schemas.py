@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI , Depends
 from sqlmodel import SQLModel , Field
@@ -37,7 +37,7 @@ class Transaction (SQLModel , table=True):
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
     amount : float
     action : str
-    timestamp : datetime = Field(default_factory=datetime.utcnow)
+    timestamp : datetime = Field(default_factory=datetime.now)
     
 class Beneficiary (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

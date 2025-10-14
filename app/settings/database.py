@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, create_engine, Session
-from app.config import DB_NAME
+from app.settings.config import DB_NAME
  
  
 sqlite_file_name = DB_NAME

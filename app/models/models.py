@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
@@ -29,7 +29,7 @@ class Transaction(BaseModel):
     iban_to: str
     amount: float
     action: str
-    timestamp: datetime.datetime = datetime.datetime.utcnow()
+    timestamp: datetime = datetime.now() 
 
 class Beneficiary(BaseModel):
     name: str
