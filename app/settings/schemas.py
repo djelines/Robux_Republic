@@ -30,6 +30,7 @@ class User_Bank_Account (SQLModel , table=True):
     uid : str = Field(index=True , foreign_key="user.uid")
     bank_account_id : int = Field(index=True, foreign_key="bank_account.id")
     name : str = Field(index=True)
+    creation_date: datetime = Field(default_factory=datetime.now)
 
 class Transaction (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
