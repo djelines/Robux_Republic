@@ -1,5 +1,5 @@
 
-from app.settings.schemas import Transaction
+from app.settings.schemas import Bank_Account, Transaction, User_Bank_Account
 from app.services.bank_account import get_account
 from app.settings.database import get_session
 from fastapi import Depends
@@ -38,9 +38,27 @@ def get_transaction():
     """ Get information about a specific transaction """
     pass
 
-def get_all_transaction():
+def get_all_transaction(iban: str ,session=Depends(get_session)):
     """ Get all information about transactions """
-    pass
+    
+    array = []
+    transactions = session.query(Transaction).filter(
+        (Transaction.iban_from == iban)).order_by(Transaction.timestamp.desc()).all()
+
+    for transaction in transactions:
+        id = session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_to).first().id
+        account_name= session.query(User_Bank_Account).filter(User_Bank_Account.bank_account_id== id).first().name
+        array.append({
+            "id": transaction.id,
+            "iban_from": transaction.iban_from,
+            "iban_to": transaction.iban_to,
+            "account_name": account_name,
+            "amount": transaction.amount,
+            "action": transaction.action,
+            "timestamp": transaction.timestamp
+        })
+
+    return array
 
 def get_iban_from():
     """ Get the IBAN of the user's account """

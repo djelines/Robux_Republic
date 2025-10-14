@@ -1,5 +1,5 @@
 from fastapi import APIRouter , Depends, FastAPI, HTTPException
-from app.services.transaction import create_transaction
+from app.services.transaction import create_transaction, get_all_transaction
 from app.models.models import Transaction
 from app.settings.database import get_session
 
@@ -11,3 +11,7 @@ def create_transaction_route(body: Transaction, session=Depends(get_session)):
     if "error" in response:
         raise HTTPException(status_code=404, detail=response["error"])
     return response
+
+@router.get("/transactions/{iban}")
+def get_all_transactions_route(iban: str, session=Depends(get_session)):
+    return get_all_transaction(iban, session)
