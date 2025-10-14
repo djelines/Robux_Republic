@@ -3,10 +3,12 @@ from sqlmodel import Session
 from app.settings.schemas import Bank_Account, User_Bank_Account , User
 from app.settings.database import create_db_and_tables, get_session, engine
 from routes.transactions import router as transactions_router
+from routes.auth import router as authentification_router
 
 
 app = FastAPI()
 app.include_router(transactions_router)
+app.include_router(authentification_router)
 
 @app.get("/")
 def read_root():
