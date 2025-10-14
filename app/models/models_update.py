@@ -27,6 +27,7 @@ class Transaction_update(BaseModel):
     iban_to: Optional[str] = None
     amount: Optional[float] = None
     action: Optional[str] = None
+    status: Optional[str] = None
     timestamp: Optional[datetime.datetime] = None
 
 class Beneficiary_update(BaseModel):

@@ -37,6 +37,7 @@ class Transaction (SQLModel , table=True):
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
     amount : float
     action : str
+    status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)
     
 class Beneficiary (SQLModel , table=True):

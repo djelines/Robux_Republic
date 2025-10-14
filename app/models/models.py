@@ -29,6 +29,7 @@ class Transaction(BaseModel):
     iban_to: str
     amount: float
     action: str
+    status: str = "pending"
     timestamp: datetime = datetime.now() 
 
 class Beneficiary(BaseModel):
