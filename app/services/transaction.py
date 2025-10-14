@@ -6,8 +6,8 @@ from fastapi import Depends
 
 def create_transaction(body: Transaction, session=Depends(get_session)):
     """ Create a new transaction """
-    get_account_from = get_account(body.iban_from , session) # celui qui envoie de l'argent
-    get_account_to = get_account(body.iban_to , session) # celui qui reçoit de l'argent
+    get_account_from = get_account(body.iban_from , session)
+    get_account_to = get_account(body.iban_to , session)
 
     if(body.iban_from == body.iban_to):
         return {"error": "Cannot transfer to the same account"}
