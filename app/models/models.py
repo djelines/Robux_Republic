@@ -1,0 +1,37 @@
+import datetime
+from typing import Optional
+from pydantic import BaseModel
+
+class User(BaseModel):
+    uid: str
+    first_name: str
+    last_name: str
+    address: str
+
+class Auth(BaseModel):
+    uid: str
+    email: str
+    password: str
+
+class Bank_Account(BaseModel):
+    is_principal: bool = False
+    is_closed: bool = False
+    iban: str
+    balance: float = 0.0
+
+class User_Bank_Account(BaseModel):
+    uid: str
+    bank_account_id: int
+    name: str
+
+class Transaction(BaseModel):
+    iban_from: str
+    iban_to: str
+    amount: float
+    action: str
+    timestamp: datetime.datetime = datetime.datetime.utcnow()
+
+class Beneficiary(BaseModel):
+    name: str
+    uid: str
+    iban_to: str
