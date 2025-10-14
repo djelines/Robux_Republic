@@ -21,6 +21,7 @@ dist/
 *.pyd
 *.sqlite3
 db.sqlite3
+database.db
 
 # Configuration IDE / éditeurs
 .vscode/
