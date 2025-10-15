@@ -34,8 +34,6 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     session.add(transaction)
     session.commit()
     session.refresh(transaction)
-
-    background_tasks.add_task(finalize_transaction, transaction.id)
     
     return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id}
 
