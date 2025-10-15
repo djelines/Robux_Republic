@@ -1,3 +1,4 @@
+import decimal
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
@@ -23,6 +24,7 @@ class User_Bank_Account(BaseModel):
     uid: str
     bank_account_id: int
     name: str
+    creation_date: datetime
 
 class Transaction(BaseModel):
     iban_from: str
@@ -36,3 +38,12 @@ class Beneficiary(BaseModel):
     name: str
     uid: str
     iban_to: str
+
+class Bank_Account_Info(BaseModel):
+    id: int
+    is_principal: bool
+    is_closed: bool
+    iban: str
+    balance: decimal.Decimal
+    name: str
+    creation_date: datetime

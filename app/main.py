@@ -5,10 +5,12 @@ from app.settings.database import create_db_and_tables, get_session, engine
 from routes.transactions import router as transactions_router
 from routes.beneficiaires import router as beneficiaires_router
 from routes.auth import router as authentification_router
+from routes.bank_account import router as bank_account_router
 
 
 app = FastAPI()
 app.include_router(transactions_router)
+app.include_router(bank_account_router)
 app.include_router(beneficiaires_router)
 
 app.include_router(authentification_router)
