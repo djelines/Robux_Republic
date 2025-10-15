@@ -2,7 +2,7 @@ import uuid
 from passlib.context import CryptContext
 
 
-pdw_context = CryptContext(schemes=["bcrypt"], deprecated="auto") # Var global 
+pdw_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto") # Var global
 
 
 def generate_uid() -> str:

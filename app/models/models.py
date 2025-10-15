@@ -9,7 +9,7 @@ class User(BaseModel):
     address: str
 
 class Auth(BaseModel):
-    uid: str
+    #uid: str
     email: str
     password: str
 
