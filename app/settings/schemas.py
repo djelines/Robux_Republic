@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI , Depends
 from sqlmodel import SQLModel , Field
+import decimal
 
 
 class User (SQLModel , table=True):
@@ -10,7 +11,6 @@ class User (SQLModel , table=True):
     first_name: str
     last_name: str
     address : str
-    
     
 class Auth (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -23,7 +23,7 @@ class Bank_Account (SQLModel , table=True):
     is_principal : bool = Field(default=False)
     is_closed : bool = Field(default=False)
     iban : str = Field(index=True, unique=True)
-    balance : float = Field(default=0.0)
+    balance : decimal.Decimal = Field(default=0.0)
     
 class User_Bank_Account (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -36,7 +36,7 @@ class Transaction (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     iban_from : str = Field(index=True, foreign_key="bank_account.iban")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
-    amount : float
+    amount : decimal.Decimal
     action : str
     status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)

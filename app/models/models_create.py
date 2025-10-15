@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from app.settings.schemas import Bank_Account, User_Bank_Account
+from app.settings.schemas import Auth, Bank_Account, User_Bank_Account
 
 
 class Bank_Account_create(BaseModel):
@@ -14,3 +14,15 @@ class Bank_Account_create(BaseModel):
     uid: str
     bank_account_id: Optional[int] = None
     name: str
+    
+class Auth_create(BaseModel):
+    uid: str
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+    address: str
+
+class Init_User(BaseModel):
+    auth: Auth_create
+    bank_account: Bank_Account_create

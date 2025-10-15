@@ -41,7 +41,7 @@ def get_all():
     pass
 
 def get_account(iban: str , session=Depends(get_session)) -> Bank_Account:
-    return session.query(Bank_Account).filter(Bank_Account.iban == iban).first()
+    return session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
 
 def get_is_principal():
     """ Check if the bank account is a principal account """

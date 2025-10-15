@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends
 
 from app.models.models import Auth
+from app.models.models_create import Init_User as Init_user_model
+from app.services.init_user import init_user
 from app.services.auth import create_user, get_uid, get_password, get_email, update_email, update_password, login, \
     get_user, get_all_information
 from app.settings import schemas
@@ -8,9 +10,9 @@ from app.settings.database import get_session
 
 router = APIRouter(prefix="/auth", tags=["Authentification"])
 
-@router.post("/signup", response_model=schemas.Auth)
-def sign_up(body:Auth, session = Depends(get_session)):
-    return create_user(body, session)
+@router.post("/signup")
+def sign_up(body: Init_user_model, session = Depends(get_session)):
+    return init_user(body, session=session)
 
 @router.post("/login")
 def log_in(email: str, password :str , session=Depends(get_session)):

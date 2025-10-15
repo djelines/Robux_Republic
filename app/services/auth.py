@@ -1,6 +1,7 @@
 from sentry_sdk import session
 from starlette import status
 from sqlmodel import select
+from app.services.user import create_user
 from app.settings.config import ALGORITHM, SECRET_KEY
 from app.settings.database import get_session
 from app.utils.utils import *
@@ -18,17 +19,25 @@ bearer_scheme = HTTPBearer()
 ######################
 #     Sign up
 ####################
-def create_user(body:Auth, session = Depends(get_session))-> Auth:
+def create_auth(body:Auth, session = Depends(get_session))-> Auth:
     """ Create authentication credentials for a user """
     existing_user = session.query(Auth).filter(Auth.email == body.email).first()
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
-    new_auth = Auth(uid=generate_uid(), email=body.email, password=body.password)
+    new_auth = Auth(uid=body.uid, email=body.email, password=body.password)
     new_auth.password = hash_password(new_auth.password)
     session.add(new_auth)
+    session.flush()
+    
+    new_user = create_user(User(uid=new_auth.uid, first_name=body.first_name, last_name=body.last_name, address=body.address), session)
+    
     session.commit()
     session.refresh(new_auth)
-    return new_auth
+    session.refresh(new_user)
+    return {
+        "auth": new_auth,
+        "user": new_user
+    }
 
 
 ######################

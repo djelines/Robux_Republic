@@ -18,7 +18,7 @@ class Bank_Account(BaseModel):
     is_principal: bool = False
     is_closed: bool = False
     iban: str
-    balance: float = 0.0
+    balance: decimal.Decimal = 0.0
 
 class User_Bank_Account(BaseModel):
     uid: str
@@ -29,7 +29,7 @@ class User_Bank_Account(BaseModel):
 class Transaction(BaseModel):
     iban_from: str
     iban_to: str
-    amount: float
+    amount: decimal.Decimal
     action: str
     status: str = "pending"
     timestamp: datetime = datetime.now() 

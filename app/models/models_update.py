@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
+import decimal
 
 class User_update(BaseModel):
     uid: str
@@ -15,7 +16,7 @@ class Auth_update(BaseModel):
 
 class Bank_Account_update(BaseModel):
     is_closed: Optional[bool] = None
-    balance: Optional[float] = None
+    balance: Optional[decimal.Decimal] = None
 
 class User_Bank_Account_update(BaseModel):
     uid: str
@@ -25,7 +26,7 @@ class User_Bank_Account_update(BaseModel):
 class Transaction_update(BaseModel):
     iban_from: Optional[str] = None
     iban_to: Optional[str] = None
-    amount: Optional[float] = None
+    amount: Optional[decimal.Decimal] = None
     action: Optional[str] = None
     status: Optional[str] = None
     timestamp: Optional[datetime.datetime] = None
