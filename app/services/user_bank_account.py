@@ -42,13 +42,26 @@ def get_all_accounts(uid: str,get_user : get_user, session = Depends(get_session
 
     return resultArray
 
+def get_all_bank_account_sql(uid: str, get_user : get_user, session=Depends(get_session)) -> List[Bank_Account]:
+
+    user_bank_accounts = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).order_by(User_Bank_Account.creation_date.asc()).all()
+
+    all_bank_accounts = []
+
+    for user_bank_account in user_bank_accounts:
+        bank_account = session.query(Bank_Account).filter(Bank_Account.id == user_bank_account.bank_account_id and
+                                                          Bank_Account.is_closed == False).first()
+        all_bank_accounts.append(bank_account)
+
+    return all_bank_accounts
+
 def get_account_id():
     pass
 
 def get_uid(iban : str, session : Session = Depends(get_session)):
     
-    account_id = session.query(Bank_Account).filter(Bank_Account.iban == iban).id
-    uid = session.query(User_Bank_Account).filter(User_Bank_Account.bank_account_id == account_id).uid
+    account_id = session.query(Bank_Account.id).filter(Bank_Account.iban == iban).scalar()
+    uid = session.query(User_Bank_Account.uid).filter(User_Bank_Account.bank_account_id == account_id).scalar()
     return uid
 
 def get_name():

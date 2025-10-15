@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 
 from app.models.models import Bank_Account
 from app.models.models_create import Bank_Account_create
-from app.services.bank_account import create_bank_account
+from app.services.bank_account import create_bank_account, close_account
 from app.services.user_bank_account import get_all_accounts
 from app.services.bank_account import get_account
 from app.settings.database import get_session
@@ -34,3 +34,7 @@ def get_all_comptes(uid: str, session=Depends(get_session), get_user= Depends(ge
 
     if response:
         return response
+
+@router.put("/close/{iban}")
+def close_bank_account(iban: str, session=Depends(get_session), get_user = Depends(get_user)):
+    return close_account(iban, get_user, session)

@@ -1,11 +1,11 @@
-from http.client import HTTPException
 from app.models.models_create import Bank_Account_create
-from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid
+from app.services import user_bank_account
+from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid, get_all_bank_account_sql
 from app.settings.schemas import Bank_Account as Bank_Account_SQLModel
 from app.models.models import Bank_Account as Bank_AccountModel, Bank_Account
 from app.settings.schemas import User_Bank_Account
 from app.settings.database import get_session
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 
 from app.utils.utils import generate_iban, get_user
 
@@ -50,7 +50,7 @@ def get_is_closed():
     """ Check if the bank account is closed """
     pass
 
-def close_account(iban: str, session=Depends(get_session)):
+def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     """ Close the bank account """
 
     # transférer l'argent sur le compte principale
@@ -58,10 +58,11 @@ def close_account(iban: str, session=Depends(get_session)):
 
     from app.services.transaction import get_all_transaction
     
-    bank_account = get_account(iban , session)
-    transactions = get_all_transaction(iban,session)
-    all_account =get_all_accounts(get_uid(iban))
-    filtered_transactions = []
+    bank_account = get_account(iban , get_user, session)
+    transactions = get_all_transaction(iban, get_user, session)
+    all_account = get_all_bank_account_sql(get_uid(iban, session), get_user, session)
+
+    principal_bank_account = {}
     
     for transaction in transactions:
         if transaction.status == "pending":
@@ -71,15 +72,27 @@ def close_account(iban: str, session=Depends(get_session)):
         raise HTTPException(status_code=400 , detail="Account is principal")
     if bank_account.is_closed:
         raise HTTPException(status_code=400 , detail="Account is closed")
-    if bank_account.balance >0.0:
+
+    if bank_account.balance >=0.0:
         for account in all_account:
-            if account.is_principal == True:
+            if account.is_principal:
                 account.balance += bank_account.balance
                 bank_account.balance = 0
                 bank_account.is_closed = True
+                principal_bank_account = account
+
+                session.commit()
+                session.refresh(bank_account)
+                session.refresh(account)
         
     if bank_account.is_closed == False:
         raise HTTPException(status_code=400 , detail="No principal account found")
+
+    return {
+        "closed_bank_account": bank_account,
+        "principal_bank_account": principal_bank_account
+
+    }
 
         
         
