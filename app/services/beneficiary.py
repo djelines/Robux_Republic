@@ -7,7 +7,7 @@ from app.services.bank_account import get_account
 from sqlalchemy.orm import Session
 
 
-def create_beneficiary(body: Beneficiary, user_uid: str, session: Session):
+def create_beneficiary(body: Beneficiary, session: Session):
     """ Create a new beneficiary """
 
     # avant de crée un beneficiare il me faut le nom son iban et l'uid de l'user
@@ -17,17 +17,17 @@ def create_beneficiary(body: Beneficiary, user_uid: str, session: Session):
     
     beneficiary_name = body.name
     beneficiary_iban = body.iban_to
-    user_uid = body.user_uid
+    user_uid = body.uid
     get_account_to = get_account(body.iban_to, session)
-    get_account_from = get_account(body.iban_from, session)
-    existing_beneficiary = session.query(Beneficiary).filter(Beneficiary.iban_to == beneficiary_iban,Beneficiary.user_uid == user_uid).first()
+    #get_account_from = user.get_all_accounts(user_uid, session)
+    existing_beneficiary = session.query(Beneficiary).filter(Beneficiary.iban_to == beneficiary_iban,Beneficiary.uid == user_uid).first()
     
     if not beneficiary_name or not beneficiary_iban:
         raise HTTPExpception(status_code=400, detail="Nom et IBAN du bénéficiaire sont requis")
     if not get_account_to:
         raise HTTPExpception(status_code=404, detail="Compte cible introuvable")
-    if get_account_from and get_account_from.iban == beneficiary_iban:
-        raise HTTPExpception(status_code=400, detail="Vous ne pouvez pas ajouter votre propre IBAN en tant que bénéficiaire")
+    # if get_account_from and get_account_from.iban == beneficiary_iban:
+    #     raise HTTPExpception(status_code=400, detail="Vous ne pouvez pas ajouter votre propre IBAN en tant que bénéficiaire")
     if existing_beneficiary:
         raise HTTPExpception(status_code=400, detail="Ce bénéficiaire existe déjà pour cet utilisateur")
 
