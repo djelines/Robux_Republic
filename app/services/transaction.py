@@ -7,7 +7,7 @@ from fastapi import Depends, HTTPException, BackgroundTasks
 import time
 from app.utils.utils import get_user
 
-def create_transaction(body: Transaction, background_tasks: BackgroundTasks,get_user : get_user, session=Depends(get_session)):
+def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user : get_user):
     """ Create a new transaction"""
 
     get_account_from = get_account(body.iban_from, session)
