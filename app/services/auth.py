@@ -15,7 +15,6 @@ algorithm = ALGORITHM
 
 bearer_scheme = HTTPBearer()
 
-
 ######################
 #     Sign up
 ####################
