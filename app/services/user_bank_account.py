@@ -23,7 +23,7 @@ def get_all_accounts(uid: str, session = Depends(get_session)) -> List[Bank_Acco
     """ Get all information about user bank accounts """
     resultArray = []
 
-    user_bank_accounts = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).order_by(User_Bank_Account.creation_date.desc()).all()
+    user_bank_accounts = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).order_by(User_Bank_Account.creation_date.asc()).all()
 
     for user_bank_account in user_bank_accounts:
         bank_account = session.query(Bank_Account).filter(Bank_Account.id == user_bank_account.bank_account_id).first()

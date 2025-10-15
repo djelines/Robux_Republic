@@ -2,14 +2,13 @@ from fastapi import Depends
 from app.services import user
 from app.services.user_bank_account import get_all_accounts
 from app.settings.database import get_session
-from app.models.models import Beneficiary
 from app.settings.schemas import Beneficiary as Beneficiary_SQLModel
 from fastapi import HTTPException as HTTPExpception
 from app.services.bank_account import get_account
 from sqlalchemy.orm import Session
 from app.services.user import get_all
 
-def create_beneficiary(body: Beneficiary, session: Session):
+def create_beneficiary(body: Beneficiary_SQLModel, session: Session):
     """ Create a new beneficiary """
 
     # avant de crée un beneficiare il me faut le nom son iban et l'uid de l'user
@@ -53,7 +52,8 @@ def create_beneficiary(body: Beneficiary, session: Session):
 
 def get_all_beneficiary(user_uid: str, session: Session = Depends(get_session)):
     """ Get all beneficiaries of a specific user """
-    return session.query(Beneficiary).filter(Beneficiary.user_uid == user_uid).all()
+    return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid == user_uid).all()
+     
 
 def get_beneficiary():
     """ Get information about a specific beneficiary """

@@ -18,8 +18,8 @@ def create_bank_account(body: Bank_Account_create = None, session = Depends(get_
             "error": "Valeurs manquantes incomplet"
         }
 
-    if body.iban is None:
-        body.iban = generate_iban()
+    body.bank_account_id = None
+    body.iban = generate_iban()
 
     bank_account = Bank_Account_SQLModel(**body.model_dump())
     session.add(bank_account)

@@ -46,3 +46,4 @@ class Beneficiary (SQLModel , table=True):
     name : str = Field(index=True)
     uid : str = Field(index=True , foreign_key="user.uid")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
+    creation_date: datetime = Field(default_factory=datetime.now)

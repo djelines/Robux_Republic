@@ -38,6 +38,7 @@ class Beneficiary(BaseModel):
     name: str
     uid: str
     iban_to: str
+    creation_date: datetime = datetime.now()
 
 class Bank_Account_Info(BaseModel):
     id: int
