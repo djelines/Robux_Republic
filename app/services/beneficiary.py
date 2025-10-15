@@ -7,8 +7,9 @@ from fastapi import HTTPException as HTTPExpception
 from app.services.bank_account import get_account
 from sqlalchemy.orm import Session
 from app.services.user import get_all
+from app.utils.utils import get_user
 
-def create_beneficiary(body: Beneficiary_SQLModel, session: Session):
+def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: get_user):
     """ Create a new beneficiary """
 
     # avant de crée un beneficiare il me faut le nom son iban et l'uid de l'user
@@ -50,7 +51,7 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session):
 
     return new_beneficiary
 
-def get_all_beneficiary(user_uid: str, session: Session = Depends(get_session)):
+def get_all_beneficiary(get_user: get_user, session: Session = Depends(get_session)):
     """ Get all beneficiaries of a specific user """
     return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid == user_uid).all()
      

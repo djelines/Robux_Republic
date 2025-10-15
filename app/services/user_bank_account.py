@@ -1,10 +1,12 @@
 from typing import List
 
 from fastapi import Depends
+from sqlmodel import Session
 
 from app.models.models import User_Bank_Account as User_Bank_Account_Models, Bank_Account_Info
 from app.settings.database import get_session
 from app.settings.schemas import User_Bank_Account, Bank_Account
+from app.utils.utils import get_user
 
 
 def create_user_bank_account(body: User_Bank_Account_Models, session = Depends(get_session)) -> User_Bank_Account:
@@ -19,14 +21,15 @@ def get_account():
     
     pass
 
-def get_all_accounts(uid: str, session = Depends(get_session)) -> List[Bank_Account_Info]:
+def get_all_accounts(uid: str,get_user : get_user, session = Depends(get_session)) -> List[Bank_Account_Info]:
     """ Get all information about user bank accounts """
     resultArray = []
 
     user_bank_accounts = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).order_by(User_Bank_Account.creation_date.asc()).all()
 
     for user_bank_account in user_bank_accounts:
-        bank_account = session.query(Bank_Account).filter(Bank_Account.id == user_bank_account.bank_account_id).first()
+        bank_account = session.query(Bank_Account).filter(Bank_Account.id == user_bank_account.bank_account_id and 
+                                                          Bank_Account.is_closed == False).first()
         resultArray.append(Bank_Account_Info(
             id=user_bank_account.id,
             name=user_bank_account.name,
@@ -41,6 +44,12 @@ def get_all_accounts(uid: str, session = Depends(get_session)) -> List[Bank_Acco
 
 def get_account_id():
     pass
+
+def get_uid(iban : str, session : Session = Depends(get_session)):
+    
+    account_id = session.query(Bank_Account).filter(Bank_Account.iban == iban).id
+    uid = session.query(User_Bank_Account).filter(User_Bank_Account.bank_account_id == account_id).uid
+    return uid
 
 def get_name():
     pass

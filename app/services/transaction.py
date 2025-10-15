@@ -5,8 +5,9 @@ from app.services.bank_account import get_account
 from app.settings.database import get_session, engine, Session
 from fastapi import Depends, HTTPException, BackgroundTasks
 import time
+from app.utils.utils import get_user
 
-def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session=Depends(get_session)):
+def create_transaction(body: Transaction, background_tasks: BackgroundTasks,get_user : get_user, session=Depends(get_session)):
     """ Create a new transaction"""
 
     get_account_from = get_account(body.iban_from, session)
@@ -66,7 +67,7 @@ def finalize_transaction(id: int):
             db_session.rollback()
             return ["error", str(e)]  
 
-def get_transaction(id: int, session=Depends(get_session)):
+def get_transaction(id: int,get_user : get_user,session=Depends(get_session)):
     """ Get information about a specific transaction """
     transaction = None
     if id is not None:
@@ -76,7 +77,7 @@ def get_transaction(id: int, session=Depends(get_session)):
 
     return transaction
 
-def get_all_transaction(iban: str, session=Depends(get_session)):
+def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_session)):
     """Get all transactions where the IBAN is either sender or recipient."""
     array = []
     transactions = session.query(Transaction).filter(

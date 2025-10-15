@@ -1,18 +1,18 @@
+from http.client import HTTPException
 from app.models.models_create import Bank_Account_create
-from app.services.user_bank_account import create_user_bank_account
+from app.services.transaction import get_all_transaction
+from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid
 from app.settings.schemas import Bank_Account as Bank_Account_SQLModel
 from app.models.models import Bank_Account as Bank_AccountModel, Bank_Account
 from app.settings.schemas import User_Bank_Account
 from app.settings.database import get_session
 from fastapi import Depends
 
-from app.utils.utils import generate_iban
+from app.utils.utils import generate_iban, get_user
 
 
-def create_bank_account(body: Bank_Account_create = None, session = Depends(get_session)):
+def create_bank_account(body: Bank_Account_create, get_user: get_user, session=Depends(get_session)):
     """ Create a new bank account """
-
-
     if body is None or body.uid is None or body.name is None:
         return {
             "error": "Valeurs manquantes incomplet"
@@ -40,7 +40,7 @@ def get_all():
     """ Get all information about bank accounts """
     pass
 
-def get_account(iban: str , session=Depends(get_session)) -> Bank_Account:
+def get_account(iban: str ,  get_user: get_user,session=Depends(get_session)) -> Bank_Account:
     return session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
 
 def get_is_principal():
@@ -50,6 +50,42 @@ def get_is_principal():
 def get_is_closed():
     """ Check if the bank account is closed """
     pass
+
+def close_account(iban: str, session=Depends(get_session)):
+    """ Close the bank account """
+    
+
+    # transférer l'argent sur le compte principale
+    # change le boolean is_closed
+    
+    bank_account = get_account(iban , session)
+    transactions = get_all_transaction(iban,session)
+    all_account =get_all_accounts(get_uid(iban))
+    filtered_transactions = []
+    
+    for transaction in transactions:
+        if transaction.status == "pending":
+            raise HTTPException(status_code=400 , detail="Pending transaction")
+    
+    if bank_account.is_principal:
+        raise HTTPException(status_code=400 , detail="Account is principal")
+    if bank_account.is_closed:
+        raise HTTPException(status_code=400 , detail="Account is closed")
+    if bank_account.balance >0.0:
+        for account in all_account:
+            if account.is_principal == True:
+                account.balance += bank_account.balance
+                bank_account.balance = 0
+                bank_account.is_closed = True
+        
+    if bank_account.is_closed == False:
+        raise HTTPException(status_code=400 , detail="No principal account found")
+
+        
+        
+
+
+
 
 def get_iban():
     """ Get the IBAN of the bank account """

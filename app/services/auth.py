@@ -11,10 +11,6 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.models.models import User, Auth
 from app.settings.schemas import Auth
 
-secret_key = SECRET_KEY
-algorithm = ALGORITHM
-
-bearer_scheme = HTTPBearer()
 
 ######################
 #     Sign up
@@ -56,11 +52,6 @@ def login(email: str, password: str, session):
 
     return {"token": generate_token(auth_user)}
 
-def get_user(authorization: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
-    try:
-        return jwt.decode(authorization.credentials, secret_key, algorithms=[algorithm])
-    except jwt.PyJWTError:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 ######################
 #     CRUD
