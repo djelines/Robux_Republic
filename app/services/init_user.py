@@ -18,12 +18,13 @@ def init_user(body: Init_User, session=Depends(get_session)):
     create_auth(body.auth, session)
     
     body.bank_account.is_principal = True
+    body.bank_account.is_closed = False
     body.bank_account.balance = 100.0
     body.bank_account.bank_account_id = None
     body.bank_account.iban = None
     body.bank_account.name = "Compte Principal"
     
-    bank_account = create_bank_account(body.bank_account, session)
+    bank_account = create_bank_account(body.bank_account, True ,session)
     
     user = get_user_info(body.auth.uid, session)
     

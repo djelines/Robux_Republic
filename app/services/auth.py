@@ -1,6 +1,8 @@
 from sentry_sdk import session
 from starlette import status
 from sqlmodel import select
+
+from app.models.models_create import Auth_create
 from app.services.user import create_user
 from app.settings.config import ALGORITHM, SECRET_KEY
 from app.settings.database import get_session
@@ -15,7 +17,7 @@ from app.settings.schemas import Auth
 ######################
 #     Sign up
 ####################
-def create_auth(body:Auth, session = Depends(get_session))-> Auth:
+def create_auth(body:Auth_create, session = Depends(get_session))-> Auth:
     """ Create authentication credentials for a user """
     existing_user = session.query(Auth).filter(Auth.email == body.email).first()
     if existing_user:

@@ -1,7 +1,8 @@
 import decimal
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from sqlalchemy.testing import exclude
 
 from app.settings.schemas import Auth, Bank_Account, User_Bank_Account
 

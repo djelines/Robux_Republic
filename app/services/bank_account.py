@@ -1,6 +1,5 @@
 from http.client import HTTPException
 from app.models.models_create import Bank_Account_create
-from app.services.transaction import get_all_transaction
 from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid
 from app.settings.schemas import Bank_Account as Bank_Account_SQLModel
 from app.models.models import Bank_Account as Bank_AccountModel, Bank_Account
@@ -53,10 +52,11 @@ def get_is_closed():
 
 def close_account(iban: str, session=Depends(get_session)):
     """ Close the bank account """
-    
 
     # transférer l'argent sur le compte principale
     # change le boolean is_closed
+
+    from app.services.transaction import get_all_transaction
     
     bank_account = get_account(iban , session)
     transactions = get_all_transaction(iban,session)
