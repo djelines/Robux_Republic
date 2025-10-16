@@ -13,6 +13,7 @@ class Bank_Account_create(BaseModel):
     iban: Optional[str] = None
     balance: Optional[decimal.Decimal] = decimal.Decimal(0)
     uid: str
+    id_bank: Optional[int] = None
     bank_account_id: Optional[int] = None
     name: str
     

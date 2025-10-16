@@ -5,13 +5,16 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from fastapi import HTTPException
 from sqlalchemy.orm import sessionmaker
 
+from app.models.models import ActionEnum
 from app.settings.database import engine
-from app.settings.schemas import Transaction, Bank_Account 
+from app.settings.schemas import Transaction, Bank_Account ,Bank_Extern
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 """ This module handles the periodic finalization of pending transactions"""
 def process_pending_transactions():
+    global account_from, error_deposite
     db_session = SessionLocal()
     error=False
     
@@ -23,32 +26,33 @@ def process_pending_transactions():
             Transaction.timestamp <= time_off  
         ).with_for_update().all()
 
-             
+
         for transaction in pending_transactions:
-            
-            account_from = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_from).first()
             account_to = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_to).first()
-            
-            if account_from == account_to:
-                transaction.status = "failed"
-                error = True
-            if transaction.amount <= 0:
-                transaction.status = "failed"
-                error = True
-            if account_from.balance < transaction.amount:
-                transaction.status = "failed"
-                error = True
-            if not account_from or not account_to:
-                transaction.status = "failed"
-                error = True
-            if account_from.is_closed or account_to.is_closed:
-                transaction.status = "failed"
-                error = True            
-            
-            if not error :
-                account_from.balance -= transaction.amount
-                account_to.balance += transaction.amount
-                transaction.status = "completed"
+
+            if transaction.action == ActionEnum.virement :
+                account_from = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_from).first()
+            elif transaction.action == ActionEnum.deposite :
+                account_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_from).first()
+                if transaction.iban_bank_from !="":
+                    account_bank_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_bank_from).first()
+                    if account_bank_from.balance < transaction.amount:
+                        error_deposite=True
+                    if not error_deposite:
+                        account_bank_from.balance -= transaction.amount
+                        account_from.balance += transaction.amount
+            if not error_deposite:
+                if account_from.balance < transaction.amount:
+                    error=True
+                if account_to.is_closed:
+                    error=True
+
+                if not error:
+                    account_from.balance -= transaction.amount
+                    account_to.balance += transaction.amount
+                    transaction.status = "completed"
+                else:
+                    transaction.status = "error"
 
         db_session.commit()
 

@@ -1,7 +1,9 @@
 from fastapi import Depends , FastAPI
 from sqlmodel import Session
+
+from app.services import transaction
 from app.services.seeders import bank_extern_create
-from app.settings.schemas import Bank_Account, User_Bank_Account , User
+from app.settings.schemas import Bank_Account, User_Bank_Account, User, Transaction, Bank_Extern
 from app.settings.database import create_db_and_tables, get_session, engine
 from routes.transactions import router as transactions_router
 from routes.beneficiaires import router as beneficiaires_router
@@ -24,10 +26,47 @@ def read_root():
 def on_startup():
     session = next(get_session())
     create_db_and_tables()
+    delete_transaction()
+    delete_bank()
     bank_extern_create(session)
     
-    
 
+def delete_bank():
+    session = next(get_session())
+    try:
+        # 1. Ciblez la table Transaction et appelez la méthode de suppression en masse
+        nombre_de_lignes_supprimees = session.query(Bank_Extern).delete()
+
+        # 2. Validez la transaction pour rendre la suppression permanente
+        session.commit()
+
+        print(f"Succès ! {nombre_de_lignes_supprimees} lignes ont été supprimées de la table Transaction.")
+
+    except Exception as e:
+        print(f"Une erreur est survenue : {e}")
+        # En cas d'erreur, annulez toutes les modifications
+        session.rollback()
+    finally:
+        # Fermez la session pour libérer la connexion
+        session.close()
+def delete_transaction():
+    session = next(get_session())
+    try:
+        # 1. Ciblez la table Transaction et appelez la méthode de suppression en masse
+        nombre_de_lignes_supprimees = session.query(Transaction).delete()
+
+        # 2. Validez la transaction pour rendre la suppression permanente
+        session.commit()
+
+        print(f"Succès ! {nombre_de_lignes_supprimees} lignes ont été supprimées de la table Transaction.")
+
+    except Exception as e:
+        print(f"Une erreur est survenue : {e}")
+        # En cas d'erreur, annulez toutes les modifications
+        session.rollback()
+    finally:
+        # Fermez la session pour libérer la connexion
+        session.close()
     # with Session(engine) as session:
     #     session.add(user1)
     #     session.add(user2)

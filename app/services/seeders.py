@@ -22,6 +22,7 @@ def bank_extern_create(session : Session):
             name="Mega Bank",
             iban="FR7612345678901234567890123MegaBankTowerGretaThunberg",
             balance=100000000.0
+
             ) 
         session.add(bank_main)
         session.add(mega_bank)

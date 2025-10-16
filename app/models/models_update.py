@@ -3,6 +3,9 @@ from typing import Optional
 from pydantic import BaseModel
 import decimal
 
+from app.models.models import ActionEnum
+
+
 class User_update(BaseModel):
     uid: str
     first_name: Optional[str] = None
@@ -27,9 +30,10 @@ class User_Bank_Account_update(BaseModel):
 class Transaction_update(BaseModel):
     iban_from: Optional[str] = None
     iban_to: Optional[str] = None
+    iban_bank_from : Optional[str] = None
     amount: Optional[decimal.Decimal] = None
-    action: Optional[str] = None
     status: Optional[str] = None
+    action:  Optional[ActionEnum] = None
     timestamp: Optional[datetime.datetime] = None
 
 class Beneficiary_update(BaseModel):

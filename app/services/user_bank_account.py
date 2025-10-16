@@ -5,8 +5,9 @@ from sqlmodel import Session
 
 from app.models.models import User_Bank_Account as User_Bank_Account_Models, Bank_Account_Info
 from app.settings.database import get_session
-from app.settings.schemas import User_Bank_Account, Bank_Account
+from app.settings.schemas import User_Bank_Account, Bank_Account,Bank_Extern
 from app.utils.utils import get_user
+from app.settings.config import BANK_NAME
 
 
 def create_user_bank_account(body: User_Bank_Account_Models, session = Depends(get_session)) -> User_Bank_Account:
@@ -67,4 +68,6 @@ def get_uid(iban : str, session : Session = Depends(get_session)):
 def get_name():
     pass
 
+def get_bank_id( session : Session = Depends(get_session) ):
+    return session.query(Bank_Extern.id).filter(Bank_Extern.name == BANK_NAME).scalar()
 

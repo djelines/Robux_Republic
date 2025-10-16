@@ -2,6 +2,11 @@ import decimal
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
+from enum import Enum
+
+class ActionEnum(str, Enum):
+    virement = "virement"
+    deposite = "depot"
 
 class User(BaseModel):
     uid: str
@@ -30,10 +35,12 @@ class User_Bank_Account(BaseModel):
 class Transaction(BaseModel):
     iban_from: str
     iban_to: str
+    iban_bank_from :str
     amount: decimal.Decimal
-    action: str
+    action:  ActionEnum
     status: str = "pending"
-    timestamp: datetime = datetime.now() 
+    timestamp: datetime = datetime.now()
+
 
 class Beneficiary(BaseModel):
     name: str

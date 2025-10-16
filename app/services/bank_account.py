@@ -1,6 +1,7 @@
 from app.models.models_create import Bank_Account_create
 from app.services import user_bank_account
-from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid, get_all_bank_account_sql
+from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid, \
+    get_all_bank_account_sql, get_bank_id
 from app.settings.schemas import Bank_Account as Bank_Account_SQLModel
 from app.models.models import Bank_Account as Bank_AccountModel, Bank_Account
 from app.settings.schemas import User_Bank_Account
@@ -24,7 +25,7 @@ def create_bank_account(body: Bank_Account_create, get_user: get_user, session=D
     session.add(bank_account)
     session.flush()
 
-    user_bank_account = create_user_bank_account(User_Bank_Account(bank_account_id=bank_account.id, name=body.name, uid=body.uid), session)
+    user_bank_account = create_user_bank_account(User_Bank_Account(bank_account_id=bank_account.id, name=body.name, uid=body.uid , bank_id=get_bank_id(session)), session)
 
     session.commit()
     session.refresh(bank_account)

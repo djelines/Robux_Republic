@@ -4,6 +4,8 @@ from fastapi import FastAPI , Depends
 from sqlmodel import SQLModel , Field
 import decimal
 
+from app.models.models import ActionEnum
+
 
 class User (SQLModel , table=True):
     uid : str = Field(index=True, unique=True)
@@ -27,7 +29,7 @@ class Bank_Account (SQLModel , table=True):
     
 class User_Bank_Account (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
-    bank_id:int = Field(index=True, foreign_key="Bank_Extern_update.id")
+    bank_id:int = Field(index=True, foreign_key="bank_extern.id")
     uid : str = Field(index=True , foreign_key="user.uid")
     bank_account_id : int = Field(index=True, foreign_key="bank_account.id")
     name : str = Field(index=True)
@@ -37,8 +39,9 @@ class Transaction (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     iban_from : str = Field(index=True, foreign_key="bank_account.iban")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
+    iban_bank_from :str = Field(index=True,foreign_key="bank_extern.iban" )
     amount : decimal.Decimal
-    action : str
+    action:  Optional[ActionEnum]
     status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)
     
