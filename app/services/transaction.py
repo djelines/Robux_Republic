@@ -17,14 +17,14 @@ from app.utils.utils import get_user
 ####################
 def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user: get_user):
     """ Create a new transaction"""
-    get_account_to = get_account(body.iban_to, session)
+    get_account_to = get_account(body.iban_to, get_user, session)
     if body.iban_from == body.iban_to:
         raise HTTPException(status_code=400, detail="Cannot transfer to the same account")
     if body.amount <= 0:
         raise HTTPException(status_code=400, detail="Invalid transaction amount")
 
     if body.action == ActionEnum.virement and "TowerTrump" not in body.iban_from:
-        get_account_from = get_account(body.iban_from, session)
+        get_account_from = get_account(body.iban_from, get_user, session)
         if get_account_from.balance < body.amount:
             raise HTTPException(status_code=400, detail="Insufficient funds")
         if get_account_from.is_closed or get_account_to.is_closed:

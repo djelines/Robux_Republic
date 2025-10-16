@@ -9,4 +9,5 @@ from app.settings.database import get_session
 from fastapi import Depends, HTTPException
 
 def get_account_bank_extern(iban: str , session:Depends(get_session)) -> Bank_Account:
+    """ Get a specific bank account by its IBAN """
     return session.query(Bank_Extern).filter(Bank_Extern.iban == iban).first()

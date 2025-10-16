@@ -14,6 +14,10 @@ from fastapi import Depends, HTTPException
 from app.utils.utils import generate_iban, get_user
 
 
+######################
+#     CRUD
+######################
+
 def create_bank_account(body: Bank_Account_create, get_user: get_user, session=Depends(get_session)):
     """ Create a new bank account """
     if body is None or body.uid is None or body.name is None:
@@ -39,24 +43,31 @@ def create_bank_account(body: Bank_Account_create, get_user: get_user, session=D
         "user_bank_account": user_bank_account
     }
 
-def get_all():
+def get_all(session: Session = Depends(get_session)):
     """ Get all information about bank accounts """
-    pass
+    info = session.query(Bank_Account_SQLModel).all()
+    if info:
+        return info
+    else:
+        raise HTTPException(status_code=404, detail="No bank accounts found")
 
-def get_account(iban: str , session: Session) -> Bank_Account:
+def get_account(iban: str , get_user:get_user,  session: Session) -> Bank_Account:
+    """ Get a specific bank account by its IBAN """
     bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
     if bank_account:
         return bank_account
     else:
         raise HTTPException(status_code=404, detail="Compte bancaire non trouvé")
 
-def get_is_principal():
-    """ Check if the bank account is a principal account """
-    pass
 
-def get_is_closed():
-    """ Check if the bank account is closed """
-    pass
+def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
+    """ Get the bank account ID from the IBAN """
+    return session.query(Bank_Account.id).filter(Bank_Account.iban == iban).first().scalar()
+
+
+######################
+#  Other operations
+######################
 
 def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     """ Close the bank account """
@@ -100,24 +111,3 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
         "principal_bank_account": principal_bank_account
 
     }
-
-
-
-def get_iban():
-    """ Get the IBAN of the bank account """
-    pass
-
-def get_balance():
-    """ Get the solde of the bank account """
-    pass
-
-def update_is_closed():
-    """ Update the closed status of the bank account and related user bank accounts """
-    pass
-
-def update_balance():
-    """ Update the balance of the bank account """
-    pass
-
-def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
-    return session.query(Bank_Account.id).filter(Bank_Account.iban == iban).first().scalar()
