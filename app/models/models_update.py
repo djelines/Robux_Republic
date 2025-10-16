@@ -20,6 +20,7 @@ class Bank_Account_update(BaseModel):
 
 class User_Bank_Account_update(BaseModel):
     uid: str
+    bank_id:Optional[int] = None
     bank_account_id: Optional[int] = None
     name: Optional[str] = None
 
@@ -35,3 +36,10 @@ class Beneficiary_update(BaseModel):
     name: Optional[str] = None
     uid: str
     iban_to: Optional[str] = None
+    
+class Bank_Extern_update(BaseModel):
+    id: Optional[int] = None
+    is_main: Optional[bool] = None
+    name: Optional[str] = None
+    iban: Optional[str] = None
+    balance: Optional[decimal.Decimal] = None

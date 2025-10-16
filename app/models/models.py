@@ -22,6 +22,7 @@ class Bank_Account(BaseModel):
 
 class User_Bank_Account(BaseModel):
     uid: str
+    bank_id:int
     bank_account_id: int
     name: str
     creation_date: datetime
@@ -48,3 +49,10 @@ class Bank_Account_Info(BaseModel):
     balance: decimal.Decimal
     name: str
     creation_date: datetime
+
+class Bank_Extern(BaseModel):
+    id: int
+    name: str
+    iban: str
+    is_main: bool
+    balance: decimal.Decimal

@@ -27,6 +27,7 @@ class Bank_Account (SQLModel , table=True):
     
 class User_Bank_Account (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
+    bank_id:int = Field(index=True, foreign_key="Bank_Extern_update.id")
     uid : str = Field(index=True , foreign_key="user.uid")
     bank_account_id : int = Field(index=True, foreign_key="bank_account.id")
     name : str = Field(index=True)
@@ -47,3 +48,10 @@ class Beneficiary (SQLModel , table=True):
     uid : str = Field(index=True , foreign_key="user.uid")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
     creation_date: datetime = Field(default_factory=datetime.now)
+    
+class Bank_Extern(SQLModel,table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    is_main: bool = Field(default=False)
+    name: str
+    iban: str = Field(index=True, unique=True)
+    balance: decimal.Decimal = Field(default=999999999999.0 , index=True)

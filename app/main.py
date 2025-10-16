@@ -1,5 +1,6 @@
 from fastapi import Depends , FastAPI
 from sqlmodel import Session
+from app.services.seeders import bank_extern_create
 from app.settings.schemas import Bank_Account, User_Bank_Account , User
 from app.settings.database import create_db_and_tables, get_session, engine
 from routes.transactions import router as transactions_router
@@ -21,18 +22,11 @@ def read_root():
 
 @app.on_event("startup")
 def on_startup():
+    session = next(get_session())
     create_db_and_tables()
+    bank_extern_create(session)
     
     
-    # user1= User(uid="123",first_name="Clement", last_name="Dupont", address="123 Rue Principale")
-    # user2= User(uid="456",first_name="Marie", last_name="Curie", address="456 Avenue des Sciences")
-    
-    
-    # bank_account1= Bank_Account(is_principal=True, is_closed=False, iban="FR7612345678901234567890123", balance=1000.0)
-    # bank_account2= Bank_Account(is_principal=False, is_closed=False, iban="FR7612345678901234567890456", balance=500.0)
-    
-    # user_bank_account1= User_Bank_Account(uid=user1.uid, bank_account_id=1, name="Compte Courant")
-    # user_bank_account2= User_Bank_Account(uid=user2.uid, bank_account_id=2, name="Compte Epargne")
 
     # with Session(engine) as session:
     #     session.add(user1)
