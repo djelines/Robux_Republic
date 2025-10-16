@@ -12,7 +12,9 @@ from fastapi import Depends, HTTPException
 
 from app.utils.utils import generate_iban, get_user
 
-
+######################
+#  Create_bank_account
+####################
 def create_bank_account(body: Bank_Account_create, get_user: get_user, session=Depends(get_session)):
     """ Create a new bank account """
     if body is None or body.uid is None or body.name is None:
@@ -42,11 +44,14 @@ def get_all():
     """ Get all information about bank accounts """
     pass
 
-def get_account(iban: str , session: Session) -> Bank_Account:
+######################
+#     Get Account
+####################
+def get_account(iban: str , get_user: get_user,session: Session) -> Bank_Account:
+    """ Get information about a specific bank account """
     bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
     if bank_account:
         return bank_account
-    # Note pour mathys: verifier si y'a Robux (depuis config) dans l'iban et renvoyer bank_extern
     else:
         raise HTTPException(status_code=404, detail="Compte bancaire non trouvé")
 
@@ -58,11 +63,13 @@ def get_is_closed():
     """ Check if the bank account is closed """
     pass
 
+######################
+#     Close Account
+####################
 def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     """ Close the bank account """
+    # transfer money to account principal
 
-    # transférer l'argent sur le compte principale
-    # change le boolean is_closed
     from app.services.transaction import get_all_transaction
 
     
@@ -119,5 +126,9 @@ def update_balance():
     """ Update the balance of the bank account """
     pass
 
+######################
+#  get_bank_account_id
+####################
 def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
+    """ Get the id of the bank account """
     return session.query(Bank_Account.id).filter(Bank_Account.iban == iban).first().scalar()

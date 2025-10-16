@@ -1,7 +1,7 @@
 from itertools import groupby
 from typing import List
 
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from sqlmodel import Session
 
 from app.models.models import User_Bank_Account as User_Bank_Account_Models, Bank_Account_Info
@@ -23,11 +23,18 @@ def get_account():
     
     pass
 
+######################
+#   Get all Account
+####################
+
 def get_all_accounts(uid: str, query_params_group_by: str, get_user : get_user, session = Depends(get_session)) -> List[Bank_Account_Info]:
     """ Get all information about user bank accounts """
     resultArray = []
-
     user_bank_accounts = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).order_by(User_Bank_Account.creation_date.asc()).all()
+    user = session.query(User_Bank_Account).filter(User_Bank_Account.uid == uid).first()
+
+    if not user: 
+        raise HTTPException(status_code=404, detail="User not found")
 
     for user_bank_account in user_bank_accounts:
         bank_account = session.query(Bank_Account).filter(Bank_Account.id == user_bank_account.bank_account_id and 
@@ -44,7 +51,7 @@ def get_all_accounts(uid: str, query_params_group_by: str, get_user : get_user, 
 
     if query_params_group_by == "is_principal":
         resultArray = [{"principal_account" if is_principal else "secondary_account": list(bank_account_array) for is_principal, bank_account_array in groupby(resultArray, key=lambda t: t.is_principal)}]
-    elif query_params_group_by and query_params_group_by != "is_principal":
+    elif query_params_group_by and query_params_group_by != "is_principal" and query_params_group_by in resultArray:
         resultArray = [{query_params_group_by: list(bank_account_array) for query_params_group_by, bank_account_array in groupby(resultArray, key=lambda t: getattr(t, query_params_group_by))}]
 
     return resultArray

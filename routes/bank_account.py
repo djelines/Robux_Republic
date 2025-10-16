@@ -37,4 +37,4 @@ def get_all_comptes(uid: str, group_by: str = None, session=Depends(get_session)
 
 @router.put("/close/{iban}")
 def close_bank_account(iban: str, session=Depends(get_session), get_user = Depends(get_user)):
-    return close_account(iban, get_user, session)
+    return close_account(iban,session,get_user)
