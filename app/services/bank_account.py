@@ -13,11 +13,9 @@ from fastapi import Depends, HTTPException
 
 from app.utils.utils import generate_iban, get_user
 
-
 ######################
-#     CRUD
-######################
-
+#  Create_bank_account
+####################
 def create_bank_account(body: Bank_Account_create, get_user: get_user, session=Depends(get_session)):
     """ Create a new bank account """
     if body is None or body.uid is None or body.name is None:
@@ -51,6 +49,9 @@ def get_all(session: Session = Depends(get_session)):
     else:
         raise HTTPException(status_code=404, detail="No bank accounts found")
 
+######################
+#     Get Account
+####################
 def get_account(iban: str , get_user:get_user,  session: Session) -> Bank_Account:
     """ Get a specific bank account by its IBAN """
     bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
@@ -59,11 +60,12 @@ def get_account(iban: str , get_user:get_user,  session: Session) -> Bank_Accoun
     else:
         raise HTTPException(status_code=404, detail="Compte bancaire non trouvé")
 
-
+######################
+#  get_bank_account_id
+####################
 def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
-    """ Get the bank account ID from the IBAN """
+    """ Get the id of the bank account """
     return session.query(Bank_Account.id).filter(Bank_Account.iban == iban).first().scalar()
-
 
 ######################
 #  Other operations
@@ -71,13 +73,11 @@ def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
 
 def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     """ Close the bank account """
+    # transfer money to account principal
 
-    # transférer l'argent sur le compte principale
-    # change le boolean is_closed
     from app.services.transaction import get_all_transaction
-
     
-    bank_account = get_account(iban , session)
+    bank_account = get_account(iban , get_user, session)
     transactions = get_all_transaction(iban, "", get_user, session)
     all_account = get_all_bank_account_sql(get_uid(iban, session), get_user, session)
 

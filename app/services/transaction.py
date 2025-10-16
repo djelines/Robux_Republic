@@ -79,7 +79,7 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
 def get_transaction(id: int, get_user: get_user, session: Session):
     """ Get information about a specific transaction """
     transaction = session.query(Transaction).filter(Transaction.id == id).first()
-    if not transaction:
+    if not transaction or transaction == None:
         raise HTTPException(status_code=404, detail="Transaction not found")
 
     return transaction
@@ -125,8 +125,6 @@ def get_all_transaction(iban: str, query_params_group_by: str, get_user: get_use
     if query_params_group_by == "date":
         array = [{day: list(groupe) for day, groupe in groupby(array, key=lambda t: t["timestamp"].date())}]
 
-    if not array:
-        raise HTTPException(status_code=404, detail="No transactions found")
     return array
 
 

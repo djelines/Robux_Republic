@@ -19,7 +19,7 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
     beneficiary_name = body.name
     beneficiary_iban = body.iban_to
     user_uid = body.uid
-    get_account_to = get_account(body.iban_to, session=session)
+    get_account_to = get_account(body.iban_to, get_user, session=session)
     
     all_bank_acounts = get_all_accounts(user_uid, "", get_user, session=session)
     
@@ -33,8 +33,9 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
         raise HTTPExpception(status_code=400, detail="Vous ne pouvez pas ajouter votre propre IBAN en tant que bénéficiaire")
     if not (get_all(user_uid, session)):
         raise HTTPExpception(status_code=404, detail="Utilisateur introuvable")
-    # if get_account_from and get_account_from.iban == beneficiary_iban:
-    #     raise HTTPExpception(status_code=400, detail="Vous ne pouvez pas ajouter votre propre IBAN en tant que bénéficiaire")
+    for account in all_bank_acounts:
+        if account.iban == beneficiary_iban:
+            raise HTTPExpception(status_code=400, detail="You cant add your own IBAN")
     if existing_beneficiary:
         raise HTTPExpception(status_code=400, detail="Ce bénéficiaire existe déjà pour cet utilisateur")
 

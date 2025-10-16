@@ -18,7 +18,7 @@ def get_beneficiaries_route(session: Session = Depends(get_session),get_user: di
 def get_one_beneficiary_route(iban_to: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
     return get_beneficiary(get_user, iban_to, session=session)
 
-@router.get("iban_to/{beneficiary_id}")
+@router.get("/{beneficiary_name}")
 def get_iban_to_route(beneficiary_name: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
     return get_iban_to(beneficiary_name, session=session)
 
@@ -26,6 +26,6 @@ def get_iban_to_route(beneficiary_name: str, session: Session = Depends(get_sess
 def create_beneficiary_route(body: Beneficiary, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
     return create_beneficiary_service(body, session=session, get_user=get_user)
 
-@router.delete("/{beneficiary_id}")
-def delete_beneficiary_route(iban_to: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
-    return delete_beneficiary(iban_to, session=session, get_user=get_user)
+@router.delete("/{iban}")
+def delete_beneficiary_route(iban: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
+    return delete_beneficiary(iban, session=session, get_user=get_user)
