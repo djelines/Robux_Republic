@@ -11,7 +11,7 @@ import jwt
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.models.models import User, Auth
-from app.settings.schemas import Auth
+from app.settings.schemas import Auth, User
 
 
 ######################
@@ -59,18 +59,28 @@ def login(email: str, password: str, session):
 #     CRUD
 ####################
 def get_all_information(user=Depends(get_user), session=Depends(get_session)):
-    """ Get all information """
+    """ Récupère toutes les informations de l'utilisateur (auth + user) """
     uid = user.get("uid")
     if not uid:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
+    # Récupération des données d'authentification
     db_auth = session.query(Auth).filter(Auth.uid == uid).first()
     if not db_auth:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
+    # Récupération des données utilisateur associées
+    db_user = session.query(User).filter(User.uid == uid).first()
+    if not db_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
+
+    # Retourne toutes les informations combinées
     return {
         "uid": db_auth.uid,
-        "email": db_auth.email
+        "email": db_auth.email,
+        "first_name": db_user.first_name,
+        "last_name": db_user.last_name,
+        "address": db_user.address,
     }
 
 
