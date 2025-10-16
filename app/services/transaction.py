@@ -1,7 +1,8 @@
 
 from typing import Optional
+from app.services.auth import get_all_information
 from app.settings.schemas import Bank_Account, Transaction, User_Bank_Account
-from app.services.bank_account import get_account
+from app.services.bank_account import get_account, get_bank_account_id, get_uid
 from app.settings.database import get_session, engine, Session
 from fastapi import Depends, HTTPException, BackgroundTasks
 import time
@@ -65,7 +66,7 @@ def finalize_transaction(id: int):
             db_session.rollback()
             return ["error", str(e)]  
 
-def get_transaction(id: int,get_user : get_user,session=Depends(get_session)):
+def get_transaction(id: int, get_user : get_user, session: Session):
     """ Get information about a specific transaction """
     transaction = None
     if id is not None:
@@ -109,9 +110,9 @@ def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_sessi
 
     return array
 
-def get_iban_from(id: int, session=Depends(get_session)):
+def get_iban_from(id: int, get_user : get_user, session=Depends(get_session)):
     """ Get the IBAN of the user's account """
-    transaction = get_transaction(id, session)
+    transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.iban_from
 
@@ -139,5 +140,32 @@ def get_date(id: int, session=Depends(get_session)):
     if transaction:
         return transaction.timestamp
 
-def delete_transaction():
-    pass
+def cancel_transaction(id:int , user: get_user , session: Session):
+    transaction = get_transaction(id, user, session)
+    iban_from = transaction.iban_from
+    
+    current_user = get_all_information(user, session)
+    uid_current_user = current_user["uid"]
+    
+    uid_user_bank_account = get_uid(iban_from, session)
+    
+    print(uid_current_user)
+    print(uid_user_bank_account)
+    
+    if uid_current_user != uid_user_bank_account:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    
+    if iban_from == transaction.iban_from: 
+        if transaction.status == "pending":
+            transaction.status = "cancel"
+            session.commit()
+            session.refresh(transaction)
+        if transaction.status == "cancel":
+            raise HTTPException(status_code=400, detail="Transaction already canceled")
+        
+        if transaction.status == "completed":
+            raise HTTPException(status_code=400, detail="Transaction already completed")
+    else :
+        raise HTTPException(status_code=400, detail="Invalid IBAN")
+    return transaction
+    

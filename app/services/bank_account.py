@@ -110,3 +110,6 @@ def update_is_closed():
 def update_balance():
     """ Update the balance of the bank account """
     pass
+
+def get_bank_account_id(iban : str, session=Depends(get_session)) -> int:
+    return session.query(Bank_Account.id).filter(Bank_Account.iban == iban).first().scalar()
