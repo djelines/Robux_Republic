@@ -17,12 +17,13 @@ def create_transaction_route(body: Transaction, background_tasks: BackgroundTask
     return response
 
 @router.get("/transactions/{iban}")
-def get_all_transactions_route(iban: str, session=Depends(get_session), get_user = Depends(get_user)):
-    return get_all_transaction(iban, session , get_user)
+def get_all_transactions_route(iban: str, session=Depends(get_session), get_user = Depends(get_user),
+                               group_by: str = None):
+    return get_all_transaction(iban , group_by, get_user, session)
 
 @router.get("/transaction/{id}")
 def get_transaction_route(id: int, session=Depends(get_session), get_user = Depends(get_user)):
-    response = get_transaction(id, session,get_user)
+    response = get_transaction(id,get_user, session)
     if "error" in response:
         raise HTTPException(status_code=404, detail=response["error"])
     return response
