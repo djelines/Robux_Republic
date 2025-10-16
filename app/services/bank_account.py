@@ -55,8 +55,8 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
 
     # transférer l'argent sur le compte principale
     # change le boolean is_closed
-
     from app.services.transaction import get_all_transaction
+
     
     bank_account = get_account(iban , get_user, session)
     transactions = get_all_transaction(iban, get_user, session)
@@ -65,9 +65,8 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     principal_bank_account = {}
     
     for transaction in transactions:
-        if transaction.status == "pending":
-            raise HTTPException(status_code=400 , detail="Pending transaction")
-    
+        if transaction["status"] == "pending":
+            raise HTTPException(status_code=400 , detail="Pending transaction")  
     if bank_account.is_principal:
         raise HTTPException(status_code=400 , detail="Account is principal")
     if bank_account.is_closed:

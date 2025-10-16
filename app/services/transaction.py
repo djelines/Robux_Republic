@@ -105,6 +105,7 @@ def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_sessi
             "account_name": account_name,
             "amount": transaction.amount,
             "action": transaction.action,
+            "status": transaction.status,
             "timestamp": transaction.timestamp
         })
 
