@@ -36,6 +36,8 @@ class Transaction_update(BaseModel):
     name: Optional[str] = None
     action:  Optional[ActionEnum] = None
     timestamp: Optional[datetime.datetime] = None
+    if_started: Optional[bool] = False
+
 
 class Beneficiary_update(BaseModel):
     name: Optional[str] = None
