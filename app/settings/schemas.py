@@ -31,7 +31,7 @@ class User_Bank_Account (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     bank_id:int = Field(index=True, foreign_key="bank_extern.id")
     uid : str = Field(index=True , foreign_key="user.uid")
-    bank_account_id : int = Field(index=True, foreign_key="bank_account.id")
+    bank_account_id : Optional[int] = Field(index=True, foreign_key="bank_account.id", default=None)
     name : str = Field(index=True)
     creation_date: datetime = Field(default_factory=datetime.now)
 
@@ -42,6 +42,7 @@ class Transaction (SQLModel , table=True):
     iban_bank_from : Optional[str] = Field(index=True,foreign_key="bank_extern.iban" )
     amount : decimal.Decimal
     action:  Optional[ActionEnum]
+    name: str
     status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)
     

@@ -1,4 +1,4 @@
-
+from itertools import groupby
 from typing import Optional
 
 from app.models.models import ActionEnum
@@ -41,12 +41,16 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     if body.action != ActionEnum.deposite:
         body.iban_bank_from = "None"
 
+    if body.name == "" or body.name == "string":
+        body.name = f"{body.action.name} de {body.amount} robux"
+
     transaction = Transaction(
         iban_from=body.iban_from,
         iban_to=body.iban_to,
         iban_bank_from = body.iban_bank_from,
         amount=body.amount,
         action=body.action,
+        name=body.name,
         status="pending"  
     )
     session.add(transaction)
@@ -66,12 +70,13 @@ def get_transaction(id: int, get_user : get_user, session: Session):
 
     return transaction
 
-def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_session)):
+def get_all_transaction(iban: str, query_params_grouped_by : str, get_user : get_user, session=Depends(get_session)):
     """Get all transactions where the IBAN is either sender or recipient."""
     array = []
     transactions = session.query(Transaction).filter(
         (Transaction.iban_from == iban) | (Transaction.iban_to == iban)
     ).order_by(Transaction.timestamp.desc()).all()
+
 
     for transaction in transactions:
         if transaction.iban_from == iban:
@@ -86,7 +91,7 @@ def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_sessi
             ).first()
             if user_bank_account:
                 account_name = user_bank_account.name
-                
+
         array.append({
             "id": transaction.id,
             "iban_from": transaction.iban_from,
@@ -96,8 +101,12 @@ def get_all_transaction(iban: str,get_user : get_user, session=Depends(get_sessi
             "amount": transaction.amount,
             "action": transaction.action,
             "status": transaction.status,
+            "transaction_name": transaction.name,
             "timestamp": transaction.timestamp
         })
+
+    if query_params_grouped_by == "date":
+        array = [{day: list(groupe) for day, groupe in groupby(array, key=lambda t: t["timestamp"].date())}]
 
     return array
 

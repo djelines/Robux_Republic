@@ -33,6 +33,7 @@ class Transaction_update(BaseModel):
     iban_bank_from : Optional[str] = None
     amount: Optional[decimal.Decimal] = None
     status: Optional[str] = None
+    name: Optional[str] = None
     action:  Optional[ActionEnum] = None
     timestamp: Optional[datetime.datetime] = None
 

@@ -28,7 +28,7 @@ class Bank_Account(BaseModel):
 class User_Bank_Account(BaseModel):
     uid: str
     bank_id:int
-    bank_account_id: int
+    bank_account_id: Optional[int] = None
     name: str
     creation_date: datetime
 
@@ -38,6 +38,7 @@ class Transaction(BaseModel):
     iban_bank_from : Optional[str] = None
     amount: decimal.Decimal
     action:  ActionEnum
+    name: str
     status: str = "pending"
     timestamp: datetime = datetime.now()
 
