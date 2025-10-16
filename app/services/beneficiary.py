@@ -19,10 +19,10 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
     
     beneficiary_name = body.name
     beneficiary_iban = body.iban_to
-    user_uid = body.uid
-    get_account_to = get_account(body.iban_to, session)
+    user_uid = get_user.get("uid")
+    get_account_to = get_account(body.iban_to, session=session)
     
-    all_bank_acounts = get_all_accounts(user_uid, session)
+    all_bank_acounts = get_all_accounts(user_uid,get_user, session=session)
     
     existing_beneficiary = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.iban_to == beneficiary_iban,Beneficiary_SQLModel.uid == user_uid).first()
     
@@ -42,7 +42,7 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
     new_beneficiary = Beneficiary_SQLModel(
         name=beneficiary_name,
         iban_to=beneficiary_iban,
-        uid=user_uid
+        uid= get_user.get("uid")
     )
 
     session.add(new_beneficiary)
@@ -53,7 +53,8 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
 
 def get_all_beneficiary(get_user: get_user, session: Session = Depends(get_session)):
     """ Get all beneficiaries of a specific user """
-    return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid == user_uid).all()
+    user_uid = get_user.get("uid")
+    return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid ==user_uid).all()
      
 
 def get_beneficiary():

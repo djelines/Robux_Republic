@@ -39,7 +39,7 @@ def get_all():
     """ Get all information about bank accounts """
     pass
 
-def get_account(iban: str ,  get_user: get_user,session=Depends(get_session)) -> Bank_Account:
+def get_account(iban: str , session:Depends(get_session)) -> Bank_Account:
     return session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
 
 def get_is_principal():
@@ -58,12 +58,12 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
     from app.services.transaction import get_all_transaction
 
     
-    bank_account = get_account(iban , get_user, session)
+    bank_account = get_account(iban , session)
     transactions = get_all_transaction(iban, get_user, session)
     all_account = get_all_bank_account_sql(get_uid(iban, session), get_user, session)
 
     principal_bank_account = {}
-    
+
     for transaction in transactions:
         if transaction["status"] == "pending":
             raise HTTPException(status_code=400 , detail="Pending transaction")  
@@ -92,10 +92,6 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
         "principal_bank_account": principal_bank_account
 
     }
-
-        
-        
-
 
 
 
