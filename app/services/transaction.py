@@ -70,7 +70,7 @@ def get_transaction(id: int, get_user : get_user, session: Session):
 
     return transaction
 
-def get_all_transaction(iban: str, query_params_grouped_by : str, get_user : get_user, session=Depends(get_session)):
+def get_all_transaction(iban: str, query_params_group_by: str, get_user : get_user, session=Depends(get_session)):
     """Get all transactions where the IBAN is either sender or recipient."""
     array = []
     transactions = session.query(Transaction).filter(
@@ -105,7 +105,7 @@ def get_all_transaction(iban: str, query_params_grouped_by : str, get_user : get
             "timestamp": transaction.timestamp
         })
 
-    if query_params_grouped_by == "date":
+    if query_params_group_by == "date":
         array = [{day: list(groupe) for day, groupe in groupby(array, key=lambda t: t["timestamp"].date())}]
 
     return array

@@ -1,3 +1,4 @@
+from itertools import groupby
 from typing import List
 
 from fastapi import Depends
@@ -22,7 +23,7 @@ def get_account():
     
     pass
 
-def get_all_accounts(uid: str,get_user : get_user, session = Depends(get_session)) -> List[Bank_Account_Info]:
+def get_all_accounts(uid: str, query_params_group_by: str, get_user : get_user, session = Depends(get_session)) -> List[Bank_Account_Info]:
     """ Get all information about user bank accounts """
     resultArray = []
 
@@ -40,6 +41,11 @@ def get_all_accounts(uid: str,get_user : get_user, session = Depends(get_session
             balance=bank_account.balance,
             iban=bank_account.iban,
         ))
+
+    if query_params_group_by == "is_principal":
+        resultArray = [{"principal_account" if is_principal else "secondary_account": list(bank_account_array) for is_principal, bank_account_array in groupby(resultArray, key=lambda t: t.is_principal)}]
+    elif query_params_group_by and query_params_group_by != "is_principal":
+        resultArray = [{query_params_group_by: list(bank_account_array) for query_params_group_by, bank_account_array in groupby(resultArray, key=lambda t: getattr(t, query_params_group_by))}]
 
     return resultArray
 
