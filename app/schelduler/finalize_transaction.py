@@ -13,6 +13,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 """ This module handles the periodic finalization of pending transactions"""
 def process_pending_transactions():
     db_session = SessionLocal()
+    error=False
     
     try:
         time_off = datetime.now() - timedelta(seconds=5)
@@ -22,8 +23,6 @@ def process_pending_transactions():
             Transaction.timestamp <= time_off  
         ).with_for_update().all()
 
-        if not pending_transactions:
-            raise HTTPException(status_code=400, detail="No pending transactions to process")
              
         for transaction in pending_transactions:
             
@@ -31,20 +30,26 @@ def process_pending_transactions():
             account_to = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_to).first()
             
             if account_from == account_to:
-                raise HTTPException(status_code=400, detail="Cannot transfer to the same account")
+                transaction.status = "failed"
+                error = True
             if transaction.amount <= 0:
-                raise HTTPException(status_code=400, detail="Invalid transaction amount")
+                transaction.status = "failed"
+                error = True
             if account_from.balance < transaction.amount:
-                raise HTTPException(status_code=400, detail="Insufficient funds")
+                transaction.status = "failed"
+                error = True
             if not account_from or not account_to:
-                raise HTTPException(status_code=404, detail="One of the accounts not found")
+                transaction.status = "failed"
+                error = True
             if account_from.is_closed or account_to.is_closed:
-                raise HTTPException(status_code=400, detail="One of the accounts is closed")
+                transaction.status = "failed"
+                error = True            
             
-            account_from.balance -= transaction.amount
-            account_to.balance += transaction.amount
-            transaction.status = "completed"
-    
+            if not error :
+                account_from.balance -= transaction.amount
+                account_to.balance += transaction.amount
+                transaction.status = "completed"
+
         db_session.commit()
 
     except Exception as e:
