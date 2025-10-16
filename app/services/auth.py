@@ -59,22 +59,21 @@ def login(email: str, password: str, session):
 #     CRUD
 ####################
 def get_all_information(user=Depends(get_user), session=Depends(get_session)):
-    """ Récupère toutes les informations de l'utilisateur (auth + user) """
+    """ Get all information about a user """
     uid = user.get("uid")
     if not uid:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+    
 
-    # Récupération des données d'authentification
+    # Join Auth and User tables to get all information
     db_auth = session.query(Auth).filter(Auth.uid == uid).first()
     if not db_auth:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
-    # Récupération des données utilisateur associées
     db_user = session.query(User).filter(User.uid == uid).first()
     if not db_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
 
-    # Retourne toutes les informations combinées
+    
     return {
         "uid": db_auth.uid,
         "email": db_auth.email,

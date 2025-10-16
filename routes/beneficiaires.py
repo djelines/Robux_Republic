@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.models.models import User
-from app.services.beneficiary import create_beneficiary as create_beneficiary_service, get_all_beneficiary
+from app.services.beneficiary import create_beneficiary as create_beneficiary_service, delete_beneficiary, get_all_beneficiary, get_beneficiary, get_iban_to
 from app.settings.database import get_session
 from app.models.models import Beneficiary
 from app.utils.utils import get_user  # Assure-toi que ton schéma est importé
@@ -15,3 +15,16 @@ def create_beneficiary_route(body: Beneficiary, session: Session = Depends(get_s
 @router.get("/{uid}")
 def get_beneficiaries_route( session: Session = Depends(get_session),get_user: dict = Depends(get_user),):
     return get_all_beneficiary(get_user, session=session)
+
+@router.get("/beneficiary/{iban_to}")
+def get_one_beneficiary_route(iban_to: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
+    return get_beneficiary(get_user, iban_to, session=session)
+
+@router.get("iban_to/{beneficiary_id}")
+def get_iban_to_route(beneficiary_name: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
+    return get_iban_to(beneficiary_name, session=session)
+                                        
+
+@router.delete("/{beneficiary_id}")
+def delete_beneficiary_route(iban_to: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
+    return delete_beneficiary(iban_to, session=session, get_user=get_user)

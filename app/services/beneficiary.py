@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from app.services import user
 from app.services.user_bank_account import get_all_accounts
 from app.settings.database import get_session
@@ -9,6 +9,10 @@ from sqlalchemy.orm import Session
 from app.services.user import get_all
 from app.utils.utils import get_user
 
+
+######################
+#     CRUD
+######################
 def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: get_user):
     """ Create a new beneficiary """
 
@@ -57,19 +61,30 @@ def get_all_beneficiary(get_user: get_user, session: Session = Depends(get_sessi
     return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid ==user_uid).all()
      
 
-def get_beneficiary():
+def get_beneficiary(get_user: get_user, iban_to:str , session: Session = Depends(get_session)):
     """ Get information about a specific beneficiary """
-    pass
+    user_uid = get_user.get("uid")
+    beneficiary = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.iban_to == iban_to, Beneficiary_SQLModel.uid == user_uid).first()
+    if not beneficiary:
+        raise HTTPExpception(status_code=404, detail="Bénéficiaire introuvable pour cet utilisateur")
+    return beneficiary
 
-def get_iban_from():
-    """ Get the IBAN of the user's account """
-    pass
 
-def get_iban_to():
+def get_iban_to(beneficiary_name: str, session: Session = Depends(get_session)):
     """ Get the IBAN of the beneficiary's account """
+    iban_to = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.name == beneficiary_name).first()
+    if not iban_to:
+       raise HTTPException(status_code=404, detail=f"Bénéficiaire '{beneficiary_name}' introuvable")
+    return {"iban_to": iban_to.iban_to}
 
-    pass
-
-def delete_beneficiary():
+def delete_beneficiary(iban_to: str, get_user: get_user, session: Session = Depends(get_session)):
     """ Delete a specific beneficiary """
-    pass
+    user_uid = get_user.get("uid")
+    beneficiary = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.iban_to == iban_to, Beneficiary_SQLModel.uid == user_uid).first()
+    if not beneficiary:
+        raise HTTPExpception(status_code=404, detail="Bénéficiaire introuvable pour cet utilisateur")
+    
+    session.delete(beneficiary)
+    session.commit()
+    return {"detail":f"Bénéficiaire {iban_to} supprimé avec succès"}
+
