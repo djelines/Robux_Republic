@@ -45,6 +45,8 @@ class Transaction (SQLModel , table=True):
     name: str
     status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)
+    if_started: Optional[bool] = False
+
     
 class Beneficiary (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)

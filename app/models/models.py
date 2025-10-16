@@ -41,6 +41,7 @@ class Transaction(BaseModel):
     name: str
     status: str = "pending"
     timestamp: datetime = datetime.now()
+    if_started: Optional[bool] = False
 
 
 class Beneficiary(BaseModel):

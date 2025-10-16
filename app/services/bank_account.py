@@ -39,7 +39,7 @@ def create_bank_account(body: Bank_Account_create, get_user: get_user, session=D
     }
 
 def get_all():
-    """ Get all information about bank accounts """
+    
     pass
 
 def get_account(iban: str , session: Session) -> Bank_Account:
