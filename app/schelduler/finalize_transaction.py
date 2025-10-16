@@ -14,7 +14,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 """ This module handles the periodic finalization of pending transactions"""
 def process_pending_transactions():
-    global account_from, error_deposite
+    error_deposite=False
+    global account_from
     db_session = SessionLocal()
     error=False
     
@@ -29,12 +30,14 @@ def process_pending_transactions():
 
         for transaction in pending_transactions:
             account_to = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_to).first()
-
+            
             if transaction.action == ActionEnum.virement :
                 account_from = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_from).first()
+           
             elif transaction.action == ActionEnum.deposite :
                 account_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_from).first()
-                if transaction.iban_bank_from !="":
+                
+                if transaction.iban_bank_from is not None:
                     account_bank_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_bank_from).first()
                     if account_bank_from.balance < transaction.amount:
                         error_deposite=True

@@ -13,15 +13,14 @@ from app.utils.utils import get_user
 
 def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user : get_user):
     """ Create a new transaction"""
-    get_account_from = get_account(body.iban_from, session)
     get_account_to = get_account(body.iban_to, session)
-
     if body.iban_from == body.iban_to:
         raise HTTPException(status_code=400, detail="Cannot transfer to the same account")
     if body.amount <= 0:
         raise HTTPException(status_code=400, detail="Invalid transaction amount")
 
     if body.action == ActionEnum.virement:
+        get_account_from = get_account(body.iban_from, session)
         if get_account_from.balance < body.amount:
             raise HTTPException(status_code=400, detail="Insufficient funds")
         if get_account_from.is_closed or get_account_to.is_closed:
@@ -29,22 +28,28 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
         if not get_account_from or not get_account_to:
             raise HTTPException(status_code=404, detail="One of the accounts not found")
 
-    elif body.action == ActionEnum.deposite and body.iban_bank_from:
+    elif body.action == ActionEnum.deposite and body.iban_bank_from is not None:
         get_account_bank_from = get_account_bank_extern(body.iban_bank_from, session)
         if get_account_bank_from.balance < body.amount:
             raise HTTPException(status_code=400, detail="Insufficient funds")
         if get_account_to.is_closed:
             raise HTTPException(status_code=400, detail="One of the accounts is closed")
+   
+    elif body.action == ActionEnum.deposite and body.iban_bank_from is None:
+        get_account_from = get_account_bank_extern(body.iban_from, session)
+        if get_account_to.is_closed:
+            raise HTTPException(status_code=400, detail="One of the accounts is closed")
+        if get_account_from.balance < body.amount:
+            raise HTTPException(status_code=400, detail="Insufficient funds")
+        if not get_account_from or not get_account_to:
+            raise HTTPException(status_code=404, detail="One of the accounts not found")
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
-
-    if body.action != ActionEnum.deposite:
-        body.iban_bank_from = "None"
 
     transaction = Transaction(
         iban_from=body.iban_from,
         iban_to=body.iban_to,
-        iban_bank_from = body.iban_bank_from,
+        iban_bank_from=body.iban_bank_from,
         amount=body.amount,
         action=body.action,
         status="pending"  
@@ -52,8 +57,8 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     session.add(transaction)
     session.commit()
     session.refresh(transaction)
-    
-    return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id}
+
+    return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id , "iban_bank_from": transaction.iban_bank_from}
 
 
 def get_transaction(id: int, get_user : get_user, session: Session):
