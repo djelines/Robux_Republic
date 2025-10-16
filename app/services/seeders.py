@@ -9,6 +9,7 @@ from app.settings.database import get_session
 
 
 def bank_extern_create(session : Session):
+    """ Seed the database with initial external banks if they don't exist """
     bank_exist = session.query(Bank_Extern).all()
     if not bank_exist:
         bank_main = Bank_Extern(

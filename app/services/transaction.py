@@ -11,6 +11,9 @@ from fastapi import Depends, HTTPException, BackgroundTasks
 import time
 from app.utils.utils import get_user
 
+######################
+#     CRUD
+######################
 def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user : get_user):
     """ Create a new transaction"""
     get_account_from = get_account(body.iban_from, session)
@@ -132,6 +135,7 @@ def get_date(id: int, session=Depends(get_session)):
         return transaction.timestamp
 
 def cancel_transaction(id:int , user: get_user , session: Session):
+    """ Cancel a specific transaction """
     transaction = get_transaction(id, user, session)
     iban_from = transaction.iban_from
     

@@ -10,15 +10,6 @@ from app.settings.database import get_session
 
 router = APIRouter(prefix="/auth", tags=["Authentification"])
 
-@router.post("/signup")
-def sign_up(body: Init_user_model, session = Depends(get_session)):
-    return init_user(body, session=session)
-
-@router.post("/login")
-def log_in(email: str, password :str , session=Depends(get_session)):
-    return login(email, password, session)
-
-
 @router.get("/get_uid")
 def recover_uid(email: str, session=Depends(get_session)):
     return get_uid(email, session)
@@ -35,6 +26,14 @@ def recover_password(uid: str, user = Depends(get_user), session=Depends(get_ses
 @router.get("/get_email")
 def recover_email(uid: str, user = Depends(get_user), session=Depends(get_session)):
     return get_email(uid, session)
+
+@router.post("/signup")
+def sign_up(body: Init_user_model, session = Depends(get_session)):
+    return init_user(body, session=session)
+
+@router.post("/login")
+def log_in(email: str, password :str , session=Depends(get_session)):
+    return login(email, password, session)
 
 @router.put("/users/{uid}/email")
 def update_user_email(uid: str, password: str, new_email: str, user = Depends(get_user), session=Depends(get_session)):

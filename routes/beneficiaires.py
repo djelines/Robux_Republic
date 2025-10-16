@@ -8,9 +8,7 @@ from app.utils.utils import get_user  # Assure-toi que ton schéma est importé
 
 router = APIRouter(prefix="/beneficiaires", tags=["Beneficiaires"])
 
-@router.post("/")
-def create_beneficiary_route(body: Beneficiary, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
-    return create_beneficiary_service(body, session=session, get_user=get_user)
+
 
 @router.get("/{uid}")
 def get_beneficiaries_route( session: Session = Depends(get_session),get_user: dict = Depends(get_user),):
@@ -24,6 +22,9 @@ def get_one_beneficiary_route(iban_to: str, session: Session = Depends(get_sessi
 def get_iban_to_route(beneficiary_name: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
     return get_iban_to(beneficiary_name, session=session)
                                         
+@router.post("/")
+def create_beneficiary_route(body: Beneficiary, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
+    return create_beneficiary_service(body, session=session, get_user=get_user)
 
 @router.delete("/{beneficiary_id}")
 def delete_beneficiary_route(iban_to: str, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
