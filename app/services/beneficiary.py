@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, HTTPException
 from app.services import user
 from app.services.user_bank_account import get_all_accounts
 from app.settings.database import get_session
@@ -11,18 +11,13 @@ from app.utils.utils import get_user
 
 def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: get_user):
     """ Create a new beneficiary """
-
-    # avant de crée un beneficiare il me faut le nom son iban et l'uid de l'user
-    # Beneficiaire doit exister dans la base de donnee
-    # virifier que l'iban existe et qu'il n'est pas le meme d'un des compte de celui de l'user
-    # le beneficaire ne peut pas etre ajouter plus d'une fois par le meme user
     
     beneficiary_name = body.name
     beneficiary_iban = body.iban_to
-    user_uid = get_user.get("uid")
+    user_uid = body.uid
     get_account_to = get_account(body.iban_to, session=session)
     
-    all_bank_acounts = get_all_accounts(user_uid,get_user, session=session)
+    all_bank_acounts = get_all_accounts(user_uid, "", get_user, session=session)
     
     existing_beneficiary = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.iban_to == beneficiary_iban,Beneficiary_SQLModel.uid == user_uid).first()
     
@@ -54,8 +49,11 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
 def get_all_beneficiary(get_user: get_user, session: Session = Depends(get_session)):
     """ Get all beneficiaries of a specific user """
     user_uid = get_user.get("uid")
-    return session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid ==user_uid).all()
-     
+    beneficiaries = session.query(Beneficiary_SQLModel).filter(Beneficiary_SQLModel.uid ==user_uid).all()
+    if not beneficiaries:
+        raise HTTPException(status_code=404, detail="No beneficiaries exists")
+
+    return beneficiaries
 
 def get_beneficiary():
     """ Get information about a specific beneficiary """

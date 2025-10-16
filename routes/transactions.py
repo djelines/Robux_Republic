@@ -23,10 +23,7 @@ def get_all_transactions_route(iban: str, session=Depends(get_session), get_user
 
 @router.get("/transaction/{id}")
 def get_transaction_route(id: int, session=Depends(get_session), get_user = Depends(get_user)):
-    response = get_transaction(id,get_user, session)
-    if "error" in response:
-        raise HTTPException(status_code=404, detail=response["error"])
-    return response
+    get_transaction(id, get_user, session)
 
 @router.post("/transaction/{id}/cancel")
 def cancel_transaction_route(id: int, get_user = Depends(get_user), session=Depends(get_session)):

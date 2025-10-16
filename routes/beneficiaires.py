@@ -12,6 +12,6 @@ router = APIRouter(prefix="/beneficiaires", tags=["Beneficiaires"])
 def create_beneficiary_route(body: Beneficiary, session: Session = Depends(get_session), get_user: dict = Depends(get_user)):
     return create_beneficiary_service(body, session=session, get_user=get_user)
 
-@router.get("/{uid}")
-def get_beneficiaries_route( session: Session = Depends(get_session),get_user: dict = Depends(get_user),):
-    return get_all_beneficiary(get_user, session=session)
+@router.get("/all-beneficiaries")
+def get_beneficiaries_route(session: Session = Depends(get_session),get_user: dict = Depends(get_user),):
+    return get_all_beneficiary(get_user, session)

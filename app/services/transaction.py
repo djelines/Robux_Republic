@@ -11,7 +11,11 @@ from fastapi import Depends, HTTPException, BackgroundTasks
 import time
 from app.utils.utils import get_user
 
-def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user : get_user):
+
+######################
+#     Create Transaction
+####################
+def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user: get_user):
     """ Create a new transaction"""
     get_account_to = get_account(body.iban_to, session)
     if body.iban_from == body.iban_to:
@@ -19,7 +23,7 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     if body.amount <= 0:
         raise HTTPException(status_code=400, detail="Invalid transaction amount")
 
-    if body.action == ActionEnum.virement:
+    if body.action == ActionEnum.virement and "TowerTrump" not in body.iban_from:
         get_account_from = get_account(body.iban_from, session)
         if get_account_from.balance < body.amount:
             raise HTTPException(status_code=400, detail="Insufficient funds")
@@ -28,21 +32,21 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
         if not get_account_from or not get_account_to:
             raise HTTPException(status_code=404, detail="One of the accounts not found")
 
-    elif body.action == ActionEnum.deposite and body.iban_bank_from is not None:
-        get_account_bank_from = get_account_bank_extern(body.iban_bank_from, session)
-        if get_account_bank_from.balance < body.amount:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
-        if get_account_to.is_closed:
-            raise HTTPException(status_code=400, detail="One of the accounts is closed")
-   
-    elif body.action == ActionEnum.deposite and body.iban_bank_from is None:
-        get_account_from = get_account_bank_extern(body.iban_from, session)
-        if get_account_to.is_closed:
-            raise HTTPException(status_code=400, detail="One of the accounts is closed")
-        if get_account_from.balance < body.amount:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
-        if not get_account_from or not get_account_to:
-            raise HTTPException(status_code=404, detail="One of the accounts not found")
+    elif body.action == ActionEnum.deposite:
+        if body.iban_bank_from and body.iban_bank_from != "string":
+            get_account_bank_from = get_account_bank_extern(body.iban_bank_from, session)
+            if get_account_bank_from.balance < body.amount:
+                raise HTTPException(status_code=400, detail="Insufficient funds")
+            if get_account_to.is_closed:
+                raise HTTPException(status_code=400, detail="One of the accounts is closed")
+        else:
+            get_account_from = get_account_bank_extern(body.iban_from, session)
+            if get_account_to.is_closed:
+                raise HTTPException(status_code=400, detail="One of the accounts is closed")
+            if get_account_from.balance < body.amount:
+                raise HTTPException(status_code=400, detail="Insufficient funds")
+            if not get_account_from or not get_account_to:
+                raise HTTPException(status_code=404, detail="One of the accounts not found")
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
 
@@ -59,32 +63,37 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
         amount=body.amount,
         action=body.action,
         name=body.name,
-        status="pending"  
+        status="pending"
     )
     session.add(transaction)
     session.commit()
     session.refresh(transaction)
 
-    return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id , "iban_bank_from": transaction.iban_bank_from}
+    return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id,
+            "iban_bank_from": transaction.iban_bank_from}
 
 
-def get_transaction(id: int, get_user : get_user, session: Session):
+###########################
+#     Get Transaction Info
+###########################
+def get_transaction(id: int, get_user: get_user, session: Session):
     """ Get information about a specific transaction """
-    transaction = None
-    if id is not None:
-        transaction = session.query(Transaction).filter(Transaction.id == id).first()
+    transaction = session.query(Transaction).filter(Transaction.id == id).first()
     if not transaction:
-        return {"error": "Transaction not found."}
+        raise HTTPException(status_code=404, detail="Transaction not found")
 
     return transaction
 
-def get_all_transaction(iban: str, query_params_group_by: str, get_user : get_user, session=Depends(get_session)):
+
+######################
+#     Get All Transaction Info
+####################
+def get_all_transaction(iban: str, query_params_group_by: str, get_user: get_user, session=Depends(get_session)):
     """Get all transactions where the IBAN is either sender or recipient."""
     array = []
     transactions = session.query(Transaction).filter(
         (Transaction.iban_from == iban) | (Transaction.iban_to == iban)
     ).order_by(Transaction.timestamp.desc()).all()
-
 
     for transaction in transactions:
         if transaction.iban_from == iban:
@@ -116,47 +125,73 @@ def get_all_transaction(iban: str, query_params_group_by: str, get_user : get_us
     if query_params_group_by == "date":
         array = [{day: list(groupe) for day, groupe in groupby(array, key=lambda t: t["timestamp"].date())}]
 
+    if not array:
+        raise HTTPException(status_code=404, detail="No transactions found")
     return array
 
-def get_iban_from(id: int, get_user : get_user, session=Depends(get_session)):
+
+######################
+#     Get Iban Of User Account
+####################
+def get_iban_from(id: int, get_user: get_user, session=Depends(get_session)):
     """ Get the IBAN of the user's account """
     transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.iban_from
 
+
+######################
+#     Get Iban Of Beneficiary Account
+####################
 def get_iban_to(id: int, session=Depends(get_session)):
     """ Get the IBAN of the beneficiary's account """
     transaction = get_transaction(id, session)
     if transaction:
         return transaction.iban_to
 
+
+######################
+#     Get transaction amount
+####################
 def get_amount(id: int, session=Depends(get_session)):
     """ Get the amount of the transaction """
     transaction = get_transaction(id, session)
     if transaction:
         return transaction.amount
 
+
+######################
+#     Get transaction action
+####################
 def get_action(id: int, session=Depends(get_session)):
     """ Get the action of the transaction """
     transaction = get_transaction(id, session)
     if transaction:
         return transaction.action
 
+
+######################
+#     Get Transaction date
+####################
 def get_date(id: int, session=Depends(get_session)):
     """ Get the date of the transaction """
     transaction = get_transaction(id, session)
     if transaction:
         return transaction.timestamp
 
-def cancel_transaction(id:int , user: get_user , session: Session):
+
+######################
+#     Cancel Transaction
+####################
+def cancel_transaction(id: int, user: get_user, session: Session):
     transaction = get_transaction(id, user, session)
     iban_from = transaction.iban_from
-    
+
     current_user = get_all_information(user, session)
     uid_current_user = current_user["uid"]
-    
+
     uid_user_bank_account = get_uid(iban_from, session)
-    
+
     print(uid_current_user)
     print(uid_user_bank_account)
 
@@ -165,24 +200,17 @@ def cancel_transaction(id:int , user: get_user , session: Session):
 
     if transaction.status == "cancel":
         raise HTTPException(status_code=400, detail="Transaction already canceled")
-    
+
     if uid_current_user != uid_user_bank_account:
         raise HTTPException(status_code=403, detail="Forbidden")
-    
-    if iban_from == transaction.iban_from: 
+
+    if iban_from == transaction.iban_from:
         if transaction.status == "pending":
             transaction.status = "cancel"
             session.commit()
             session.refresh(transaction)
 
 
-    else :
+    else:
         raise HTTPException(status_code=400, detail="Invalid IBAN")
     return transaction
-
-
-    #id bank from / id bank to / montant / iban.to
-
-    #id bank to -> id bank from frerot donne moi ma tune
-    #id bank to -> iban.to moula moula moula
-

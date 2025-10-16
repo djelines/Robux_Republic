@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 from app.models.models_create import Bank_Account_create
 from app.services import user_bank_account
+from app.services.bank_extern import get_account_bank_extern
 from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid, \
     get_all_bank_account_sql, get_bank_id
 from app.settings.schemas import Bank_Account as Bank_Account_SQLModel
@@ -46,7 +47,6 @@ def get_account(iban: str , session: Session) -> Bank_Account:
     bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
     if bank_account:
         return bank_account
-    # Note pour mathys: verifier si y'a Robux (depuis config) dans l'iban et renvoyer bank_extern
     else:
         raise HTTPException(status_code=404, detail="Compte bancaire non trouvé")
 
@@ -67,7 +67,7 @@ def close_account(iban: str, get_user: get_user, session=Depends(get_session)):
 
     
     bank_account = get_account(iban , session)
-    transactions = get_all_transaction(iban, get_user, session)
+    transactions = get_all_transaction(iban, "", get_user, session)
     all_account = get_all_bank_account_sql(get_uid(iban, session), get_user, session)
 
     principal_bank_account = {}
