@@ -39,7 +39,7 @@ class Transaction (SQLModel , table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     iban_from : str = Field(index=True, foreign_key="bank_account.iban")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
-    iban_bank_from :str = Field(index=True,foreign_key="bank_extern.iban" )
+    iban_bank_from : Optional[str] = Field(index=True,foreign_key="bank_extern.iban" )
     amount : decimal.Decimal
     action:  Optional[ActionEnum]
     status : str = Field(default="pending")

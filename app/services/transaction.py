@@ -29,7 +29,7 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
         if not get_account_from or not get_account_to:
             raise HTTPException(status_code=404, detail="One of the accounts not found")
 
-    elif body.action == ActionEnum.deposite:
+    elif body.action == ActionEnum.deposite and body.iban_bank_from:
         get_account_bank_from = get_account_bank_extern(body.iban_bank_from, session)
         if get_account_bank_from.balance < body.amount:
             raise HTTPException(status_code=400, detail="Insufficient funds")

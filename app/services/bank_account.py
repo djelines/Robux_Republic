@@ -1,3 +1,5 @@
+from sqlalchemy.orm import Session
+
 from app.models.models_create import Bank_Account_create
 from app.services import user_bank_account
 from app.services.user_bank_account import create_user_bank_account, get_all_accounts, get_uid, \
@@ -40,8 +42,13 @@ def get_all():
     """ Get all information about bank accounts """
     pass
 
-def get_account(iban: str , session:Depends(get_session)) -> Bank_Account:
-    return session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
+def get_account(iban: str , session: Session) -> Bank_Account:
+    bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
+    if bank_account:
+        return bank_account
+    # Note pour mathys: verifier si y'a Robux (depuis config) dans l'iban et renvoyer bank_extern
+    else:
+        raise HTTPException(status_code=404, detail="Compte bancaire non trouvé")
 
 def get_is_principal():
     """ Check if the bank account is a principal account """

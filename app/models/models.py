@@ -35,7 +35,7 @@ class User_Bank_Account(BaseModel):
 class Transaction(BaseModel):
     iban_from: str
     iban_to: str
-    iban_bank_from :str
+    iban_bank_from : Optional[str] = None
     amount: decimal.Decimal
     action:  ActionEnum
     status: str = "pending"
