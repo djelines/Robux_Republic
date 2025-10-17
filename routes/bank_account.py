@@ -18,7 +18,7 @@ def get_bank_account(iban: str, session=Depends(get_session), get_user= Depends(
     return HTTPException(status_code=404)
 
 @router.get("/all-bank-accounts/{uid}")
-def get_all_comptes(uid: str, group_by: str = None, session=Depends(get_session), get_user= Depends(get_user)):
+def get_all_bank_account_of_user(uid: str, group_by: str = None, session=Depends(get_session), get_user= Depends(get_user)):
     response = get_all_accounts(uid, group_by, get_user,session)
 
     if response:

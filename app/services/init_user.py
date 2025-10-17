@@ -19,7 +19,7 @@ def init_user(body: Init_User, session=Depends(get_session)):
     
     body.bank_account.is_principal = True
     body.bank_account.is_closed = False
-    body.bank_account.balance = 10000000000.0
+    body.bank_account.balance = 100.0
     body.bank_account.bank_account_id = None
     body.bank_account.iban = None
     body.bank_account.name = "Compte Principal"

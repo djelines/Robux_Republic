@@ -15,7 +15,7 @@ def recover_uid(email: str, session=Depends(get_session)):
     return get_uid(email, session)
 
 @router.get("/me")
-def me(user=Depends(get_user), session=Depends(get_session)):
+def get_user_profile(user=Depends(get_user), session=Depends(get_session)):
     return get_all_information(user, session)
 
 

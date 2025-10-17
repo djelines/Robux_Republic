@@ -46,6 +46,7 @@ class Transaction (SQLModel , table=True):
     status : str = Field(default="pending")
     timestamp : datetime = Field(default_factory=datetime.now)
     if_started: Optional[bool] = False
+    is_mail_send: Optional[bool] = False
 
     
 class Beneficiary (SQLModel , table=True):

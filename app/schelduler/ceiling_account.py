@@ -1,5 +1,4 @@
-# python -m app.schelduler.finalize_transaction
-# python -m app.schelduler.finalize_transaction
+# python -m app.schelduler.process_ceiling_account
 import time
 from datetime import datetime, timedelta
 from apscheduler.schedulers.blocking import BlockingScheduler

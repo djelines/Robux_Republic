@@ -12,6 +12,7 @@ from routes.bank_account import router as bank_account_router
 from routes.users import router as users_router
 
 
+
 app = FastAPI()
 app.include_router(transactions_router)
 app.include_router(bank_account_router)
@@ -28,8 +29,8 @@ def read_root():
 def on_startup():
     session = next(get_session())
     create_db_and_tables()
-    delete_transaction()
     bank_extern_create(session)
+
 
 
 
