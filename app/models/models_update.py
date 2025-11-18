@@ -42,7 +42,6 @@ class Transaction_update(BaseModel):
 
 class Beneficiary_update(BaseModel):
     name: Optional[str] = None
-    uid: str
     iban_to: Optional[str] = None
     
 class Bank_Extern_update(BaseModel):

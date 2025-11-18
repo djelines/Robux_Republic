@@ -18,7 +18,7 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
     
     beneficiary_name = body.name
     beneficiary_iban = body.iban_to
-    user_uid = body.uid
+    user_uid = get_user.get("uid")
     get_account_to = get_account(body.iban_to, get_user, session=session)
     
     all_bank_acounts = get_all_accounts(user_uid, "", get_user, session=session)

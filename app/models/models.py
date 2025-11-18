@@ -47,7 +47,6 @@ class Transaction(BaseModel):
 
 class Beneficiary(BaseModel):
     name: str
-    uid: str
     iban_to: str
     creation_date: datetime = datetime.now()
 
