@@ -12,13 +12,13 @@ class Bank_Account_create(BaseModel):
     is_closed: Optional[bool] = False
     iban: Optional[str] = None
     balance: Optional[decimal.Decimal] = decimal.Decimal(0)
-    uid: str
+    uid: Optional[str] = None
     id_bank: Optional[int] = None
     bank_account_id: Optional[int] = None
-    name: str
+    name: Optional[str] = None
     
 class Auth_create(BaseModel):
-    uid: str
+    uid: Optional[str] = None
     email: str
     password: str
     first_name: str

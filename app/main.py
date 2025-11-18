@@ -10,6 +10,7 @@ from routes.beneficiaires import router as beneficiaires_router
 from routes.auth import router as authentification_router
 from routes.bank_account import router as bank_account_router
 from routes.users import router as users_router
+from fastapi.middleware.cors import CORSMiddleware
 
 
 
@@ -18,6 +19,14 @@ app.include_router(transactions_router)
 app.include_router(bank_account_router)
 app.include_router(beneficiaires_router)
 app.include_router(users_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(authentification_router)
 

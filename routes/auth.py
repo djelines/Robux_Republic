@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Body, Depends
 
 from app.models.models import Auth
 from app.models.models_create import Init_User as Init_user_model
@@ -32,7 +32,7 @@ def sign_up(body: Init_user_model, session = Depends(get_session)):
     return init_user(body, session=session)
 
 @router.post("/login")
-def log_in(email: str, password :str , session=Depends(get_session)):
+def log_in(email: str = Body(),password: str = Body(),session=Depends(get_session)):
     return login(email, password, session)
 
 @router.put("/users/{uid}/email")
