@@ -35,9 +35,12 @@ def create_beneficiary(body: Beneficiary_SQLModel, session: Session , get_user: 
         raise HTTPExpception(status_code=404, detail="Utilisateur introuvable")
     for account in all_bank_acounts:
         if account.iban == beneficiary_iban:
-            raise HTTPExpception(status_code=400, detail="You cant add your own IBAN")
+            raise HTTPExpception(status_code=400, detail="Vous ne pouvez pas ajouter votre propre IBAN en tant que bénéficiaire")
     if existing_beneficiary:
         raise HTTPExpception(status_code=400, detail="Ce bénéficiaire existe déjà pour cet utilisateur")
+    if beneficiary_name.strip() == "" or beneficiary_iban.strip() == "":
+        raise HTTPExpception(status_code=400, detail="Le nom et l'IBAN du bénéficiaire ne peuvent pas être vides")
+    
 
     new_beneficiary = Beneficiary_SQLModel(
         name=beneficiary_name,
