@@ -54,6 +54,7 @@ def get_all(session: Session = Depends(get_session)):
 ####################
 def get_account(iban: str , get_user:get_user,  session: Session) -> Bank_Account:
     """ Get a specific bank account by its IBAN """
+    print("Getting bank account with IBAN:")
     bank_account = session.query(Bank_Account_SQLModel).filter(Bank_Account_SQLModel.iban == iban).first()
     if bank_account:
         return bank_account

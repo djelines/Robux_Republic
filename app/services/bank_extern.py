@@ -11,3 +11,8 @@ from fastapi import Depends, HTTPException
 def get_account_bank_extern(iban: str , session:Depends(get_session)) -> Bank_Account:
     """ Get a specific bank account by its IBAN """
     return session.query(Bank_Extern).filter(Bank_Extern.iban == iban).first()
+
+def get_main_bank_extern(session:Depends(get_session)) -> Bank_Account:
+    """ Get the main robux bank account """
+    print("Getting main bank extern")
+    return session.query(Bank_Extern).filter(Bank_Extern.is_main == True).first()
