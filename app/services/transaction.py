@@ -50,7 +50,7 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
 
-    if body.action != ActionEnum.deposite:
+    if body.action != ActionEnum.deposite and body.iban_bank_from is None:
         body.iban_bank_from = "None"
 
     if body.name == "" or body.name == "string":
@@ -199,8 +199,6 @@ def cancel_transaction(id: int, user: get_user, session: Session):
     if transaction.status == "cancel":
         raise HTTPException(status_code=400, detail="Transaction already canceled")
 
-    if uid_current_user != uid_user_bank_account:
-        raise HTTPException(status_code=403, detail="Forbidden")
 
     if iban_from == transaction.iban_from:
         if transaction.status == "pending":
