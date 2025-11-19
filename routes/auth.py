@@ -4,7 +4,7 @@ from app.models.models import Auth
 from app.models.models_create import Init_User as Init_user_model
 from app.services.init_user import init_user
 from app.services.auth import create_user, get_uid, get_password, get_email, update_email, update_password, login, \
-    get_user, get_all_information
+    get_user, get_all_information, update_user
 from app.settings import schemas
 from app.settings.database import get_session
 
@@ -42,3 +42,7 @@ def update_user_email(uid: str, password: str, new_email: str, user = Depends(ge
 @router.put("/users/{uid}/password")
 def update_user_password(uid: str, password: str, new_password: str, user = Depends(get_user), session=Depends(get_session)):
     return update_password(uid, password, new_password, session)
+
+@router.put("/users/{uid}/profile")
+def update_user_profile(uid: str, body: schemas.UserUpdate, user = Depends(get_user), session=Depends(get_session)):
+    return update_user(uid, body, session)

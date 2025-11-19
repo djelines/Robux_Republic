@@ -65,3 +65,8 @@ class Bank_Extern(BaseModel):
     iban: str
     is_main: bool
     balance: decimal.Decimal
+
+class UserUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None

@@ -4,6 +4,8 @@ from sqlmodel import select
 
 from app.models.models_create import Auth_create
 from app.services.user import create_user
+from app.settings import schemas
+from app.settings import schemas
 from app.settings.config import ALGORITHM, SECRET_KEY
 from app.settings.database import get_session
 from app.utils.utils import *
@@ -131,6 +133,19 @@ def update_email(uid:str , password:str, new_email:str , session=Depends(get_ses
     session.commit()
     session.refresh(auth_user)
     return auth_user.email
+
+def update_user(uid: str, body: schemas.UserUpdate, session=Depends(get_session)) -> User:
+    db_user = session.query(User).filter(User.uid == uid).first()
+    if not db_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    for key, value in body.dict(exclude_unset=True).items():
+        setattr(db_user, key, value)
+
+    session.commit()
+    session.refresh(db_user)
+    return db_user
+
 
 def update_password(uid:str , password:str, new_password:str , session=Depends(get_session))-> str:
     """ Update the password of a user """

@@ -50,3 +50,8 @@ class Bank_Extern_update(BaseModel):
     name: Optional[str] = None
     iban: Optional[str] = None
     balance: Optional[decimal.Decimal] = None
+
+class UserUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None

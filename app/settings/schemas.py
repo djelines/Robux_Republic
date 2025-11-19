@@ -3,6 +3,8 @@ from typing import Optional
 from fastapi import FastAPI , Depends
 from sqlmodel import SQLModel , Field
 import decimal
+from pydantic import BaseModel
+from typing import Optional
 
 from app.models.models import ActionEnum
 
@@ -62,3 +64,8 @@ class Bank_Extern(SQLModel,table=True):
     name: str
     iban: str = Field(index=True, unique=True)
     balance: decimal.Decimal = Field(default=999999999999.0 , index=True)
+
+class UserUpdate(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[str] = None
