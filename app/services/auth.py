@@ -136,11 +136,17 @@ def update_email(uid:str , password:str, new_email:str , session=Depends(get_ses
 
 def update_user(uid: str, body: schemas.UserUpdate, session=Depends(get_session)) -> User:
     db_user = session.query(User).filter(User.uid == uid).first()
+    db_auth = session.query(Auth).filter(Auth.uid == uid).first()
     if not db_user:
         raise HTTPException(status_code=404, detail="User not found")
 
     for key, value in body.dict(exclude_unset=True).items():
-        setattr(db_user, key, value)
+        
+        if hasattr(db_user, key):
+            setattr(db_user, key, value)
+        
+        if hasattr(db_auth, key):
+            setattr(db_auth, key, value)
 
     session.commit()
     session.refresh(db_user)
