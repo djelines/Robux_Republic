@@ -81,3 +81,4 @@ def get_bank_id( session : Session = Depends(get_session) ):
     """ Get the bank ID from the bank name in config """
     return session.query(Bank_Extern.id).filter(Bank_Extern.name == BANK_NAME).scalar()
 
+

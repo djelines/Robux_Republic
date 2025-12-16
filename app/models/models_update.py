@@ -35,7 +35,7 @@ class Transaction_update(BaseModel):
     status: Optional[str] = None
     name: Optional[str] = None
     action:  Optional[ActionEnum] = None
-    timestamp: Optional[datetime.datetime] = None
+    timestamp: Optional[datetime] = None
     if_started: Optional[bool] = False
     is_mail_send: Optional[bool] = False
 
