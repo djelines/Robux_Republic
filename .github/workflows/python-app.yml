@@ -38,3 +38,11 @@ jobs:
       run: pytest
     - name: Generate documentation
       run: pdoc app routes tests -o documentation 
+
+    - name: Commit and push documentation
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add documentation
+        git commit -m "Update documentation" || echo "No changes to commit"
+        git push
