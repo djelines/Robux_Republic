@@ -38,7 +38,6 @@ jobs:
       run: pytest
     - name: Generate documentation
       run: pdoc app routes tests -o documentation 
-
     - name: Commit and push documentation
       run: |
         git config --global user.name "github-actions"
