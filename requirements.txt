@@ -1,6 +1,7 @@
 aiosmtplib==4.0.2
 annotated-types==0.7.0
 anyio==4.11.0
+APScheduler==3.11.0
 async-timeout==5.0.1
 babel==2.17.0
 backrefs==5.9
@@ -26,10 +27,12 @@ httpcore==1.0.9
 httptools==0.7.1
 httpx==0.28.1
 idna==3.11
+iniconfig==2.3.0
 isort==7.0.0
 Jinja2==3.1.6
 Markdown==3.9
 markdown-it-py==4.0.0
+markdown2==2.5.4
 MarkupSafe==3.0.3
 mccabe==0.7.0
 mdurl==0.1.2
@@ -42,7 +45,9 @@ packaging==25.0
 paginate==0.5.7
 passlib==1.7.4
 pathspec==0.12.1
+pdoc==16.0.0
 platformdirs==4.5.0
+pluggy==1.6.0
 pycodestyle==2.14.0
 pycparser==2.23
 pydantic==2.12.2
@@ -52,6 +57,7 @@ pyflakes==3.4.0
 Pygments==2.19.2
 PyJWT==2.10.1
 pymdown-extensions==10.16.1
+pytest==9.0.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.1.1
 python-multipart==0.0.20
@@ -71,13 +77,14 @@ sortedcontainers==2.4.0
 SQLAlchemy==2.0.44
 sqlmodel==0.0.27
 starlette==0.48.0
+tomli==2.3.0
 typer==0.19.2
 typing-inspection==0.4.2
 typing_extensions==4.15.0
+tzlocal==5.3.1
 urllib3==2.5.0
 uvicorn==0.37.0
 uvloop==0.21.0
 watchdog==6.0.0
 watchfiles==1.1.0
 websockets==15.0.1
-pdoc==16.0.0
