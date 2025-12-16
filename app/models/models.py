@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 from enum import Enum
-
+from sqlalchemy import create_engine
 class ActionEnum(str, Enum):
     virement = "virement"
     deposite = "depot"
@@ -70,3 +70,6 @@ class UserUpdate(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[str] = None
+
+def get_db_engine(url="sqlite:////database.db"):
+   return create_engine(url)
