@@ -18,6 +18,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with: 
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v4
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
@@ -45,3 +51,10 @@ jobs:
         git add documentation
         git commit -m "Update documentation" || echo "No changes to commit"
         git push
+
+    - name: Build and push
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository }}/backendbank
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[:upper:]' '[:lower:]')
+        docker build -t $IMAGE_ID:latest .
+        docker push $IMAGE_ID:latest
