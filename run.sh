@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir -p /app/sql_data
+mkdir -p /app/data
 
 python -m app.schelduler.finalize_transaction &
 
