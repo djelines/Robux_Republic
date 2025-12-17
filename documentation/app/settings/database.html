@@ -31,12 +31,6 @@
             <h2>API Documentation</h2>
                 <ul class="memberlist">
             <li>
-                    <a class="variable" href="#sqlite_file_name">sqlite_file_name</a>
-            </li>
-            <li>
-                    <a class="variable" href="#sqlite_url">sqlite_url</a>
-            </li>
-            <li>
                     <a class="variable" href="#connect_args">connect_args</a>
             </li>
             <li>
@@ -73,49 +67,28 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">app.settings.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">DB_NAME</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a> 
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a> 
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="n">sqlite_file_name</span> <span class="o">=</span> <span class="n">DB_NAME</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">sqlite_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sqlite:///</span><span class="si">{</span><span class="n">sqlite_file_name</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">connect_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">sqlite_url</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="n">connect_args</span><span class="p">)</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="k">def</span><span class="w"> </span><span class="nf">create_db_and_tables</span><span class="p">():</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="n">SQLModel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>     
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_session</span><span class="p">():</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="k">yield</span> <span class="n">session</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">if</span> <span class="n">DB_NAME</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;sqlite:///&quot;</span><span class="p">):</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>    <span class="n">sqlite_url</span> <span class="o">=</span> <span class="n">DB_NAME</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">else</span><span class="p">:</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="n">sqlite_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;sqlite:///</span><span class="si">{</span><span class="n">DB_NAME</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a>    
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="n">connect_args</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;check_same_thread&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="n">engine</span> <span class="o">=</span> <span class="n">create_engine</span><span class="p">(</span><span class="n">sqlite_url</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">connect_args</span><span class="o">=</span><span class="n">connect_args</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="k">def</span><span class="w"> </span><span class="nf">create_db_and_tables</span><span class="p">():</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>    <span class="n">SQLModel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>     
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_session</span><span class="p">():</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>    <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>        <span class="k">yield</span> <span class="n">session</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        
 </span></pre></div>
 
 
             </section>
-                <section id="sqlite_file_name">
-                    <div class="attr variable">
-            <span class="name">sqlite_file_name</span>        =
-<span class="default_value">&#39;database.db&#39;</span>
-
-        
-    </div>
-    <a class="headerlink" href="#sqlite_file_name"></a>
-    
-    
-
-                </section>
-                <section id="sqlite_url">
-                    <div class="attr variable">
-            <span class="name">sqlite_url</span>        =
-<span class="default_value">&#39;sqlite:///database.db&#39;</span>
-
-        
-    </div>
-    <a class="headerlink" href="#sqlite_url"></a>
-    
-    
-
-                </section>
                 <section id="connect_args">
                     <div class="attr variable">
             <span class="name">connect_args</span>        =
@@ -151,8 +124,8 @@
 
     </div>
     <a class="headerlink" href="#create_db_and_tables"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="create_db_and_tables-12"><a href="#create_db_and_tables-12"><span class="linenos">12</span></a><span class="k">def</span><span class="w"> </span><span class="nf">create_db_and_tables</span><span class="p">():</span>
-</span><span id="create_db_and_tables-13"><a href="#create_db_and_tables-13"><span class="linenos">13</span></a>    <span class="n">SQLModel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="create_db_and_tables-15"><a href="#create_db_and_tables-15"><span class="linenos">15</span></a><span class="k">def</span><span class="w"> </span><span class="nf">create_db_and_tables</span><span class="p">():</span>
+</span><span id="create_db_and_tables-16"><a href="#create_db_and_tables-16"><span class="linenos">16</span></a>    <span class="n">SQLModel</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">create_all</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -170,9 +143,9 @@
 
     </div>
     <a class="headerlink" href="#get_session"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="get_session-15"><a href="#get_session-15"><span class="linenos">15</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_session</span><span class="p">():</span>
-</span><span id="get_session-16"><a href="#get_session-16"><span class="linenos">16</span></a>    <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
-</span><span id="get_session-17"><a href="#get_session-17"><span class="linenos">17</span></a>        <span class="k">yield</span> <span class="n">session</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="get_session-18"><a href="#get_session-18"><span class="linenos">18</span></a><span class="k">def</span><span class="w"> </span><span class="nf">get_session</span><span class="p">():</span>
+</span><span id="get_session-19"><a href="#get_session-19"><span class="linenos">19</span></a>    <span class="k">with</span> <span class="n">Session</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+</span><span id="get_session-20"><a href="#get_session-20"><span class="linenos">20</span></a>        <span class="k">yield</span> <span class="n">session</span>
 </span></pre></div>
 
 
