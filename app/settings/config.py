@@ -1,19 +1,22 @@
-DB_NAME = "database.db"
-ALGORITHM = "HS256"
-SECRET_KEY = "give_me_robux_please_for_picture"
-BANK_NAME ="Robux"
-CEILING_ACCOUNT = 50000
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
+DB_NAME = os.getenv("DB_NAME")
+ALGORITHM = os.getenv("ALGORITHM")
+SECRET_KEY = os.getenv("SECRET_KEY")
+BANK_NAME = os.getenv("BANK_NAME")
+CEILING_ACCOUNT = os.getenv("CEILING_ACCOUNT")
 
  # Email configuration
-
-MAIL_USERNAME="charines78@gmail.com"
-MAIL_PASSWORD = "hmrljqbgnegfhauh"
-MAIL_FROM = "charines78@gmail.com"
-MAIL_PORT = 587
-MAIL_SERVER = "smtp.gmail.com"
-MAIL_FROM_NAME="Robux Republic"
-MAIL_STARTTLS = True
-MAIL_SSL_TLS = False
-USE_CREDENTIALS = True
-VALIDATE_CERTS = False
+    
+MAIL_USERNAME= os.getenv("MAIL_USERNAME")
+MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+MAIL_FROM =   os.getenv("MAIL_FROM")
+MAIL_PORT = os.getenv("MAIL_PORT")
+MAIL_SERVER = os.getenv("MAIL_SERVER")
+MAIL_FROM_NAME= os.getenv("MAIL_FROM_NAME")
+MAIL_STARTTLS = os.getenv("MAIL_STARTTLS")
+MAIL_SSL_TLS = os.getenv("MAIL_SSL_TLS")
+USE_CREDENTIALS = os.getenv("USE_CREDENTIALS")
+VALIDATE_CERTS = os.getenv("VALIDATE_CERTS")
