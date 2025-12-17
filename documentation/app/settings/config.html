@@ -100,24 +100,24 @@
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="n">load_dotenv</span><span class="p">()</span>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="n">DB_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DB_NAME&quot;</span><span class="p">)</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">ALGORITHM</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ALGORITHM&quot;</span><span class="p">)</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SECRET_KEY&quot;</span><span class="p">)</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">BANK_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BANK_NAME&quot;</span><span class="p">)</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="n">CEILING_ACCOUNT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CEILING_ACCOUNT&quot;</span><span class="p">)</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="n">DB_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;DB_NAME&quot;</span> <span class="p">,</span><span class="s2">&quot;database.db&quot;</span><span class="p">)</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="n">ALGORITHM</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ALGORITHM&quot;</span><span class="p">,</span> <span class="s2">&quot;HS256&quot;</span><span class="p">)</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SECRET_KEY&quot;</span> <span class="p">,</span><span class="s2">&quot;default_secret_key&quot;</span><span class="p">)</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">BANK_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BANK_NAME&quot;</span> <span class="p">,</span><span class="s2">&quot;Robux&quot;</span><span class="p">)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="n">CEILING_ACCOUNT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CEILING_ACCOUNT&quot;</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a> <span class="c1"># Email configuration</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">MAIL_USERNAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_USERNAME&quot;</span><span class="p">)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="n">MAIL_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PASSWORD&quot;</span><span class="p">)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">MAIL_FROM</span> <span class="o">=</span>   <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM&quot;</span><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">MAIL_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PORT&quot;</span><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">MAIL_SERVER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SERVER&quot;</span><span class="p">)</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">MAIL_FROM_NAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM_NAME&quot;</span><span class="p">)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">MAIL_STARTTLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_STARTTLS&quot;</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">MAIL_SSL_TLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SSL_TLS&quot;</span><span class="p">)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">USE_CREDENTIALS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;USE_CREDENTIALS&quot;</span><span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">VALIDATE_CERTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VALIDATE_CERTS&quot;</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">MAIL_USERNAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_USERNAME&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="n">MAIL_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PASSWORD&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">MAIL_FROM</span> <span class="o">=</span>   <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM&quot;</span> <span class="p">,</span><span class="s2">&quot;default@gmail.com&quot;</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">MAIL_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PORT&quot;</span> <span class="p">,</span><span class="s2">&quot;587&quot;</span><span class="p">)</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">MAIL_SERVER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SERVER&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">MAIL_FROM_NAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM_NAME&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">MAIL_STARTTLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_STARTTLS&quot;</span><span class="p">,</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">MAIL_SSL_TLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SSL_TLS&quot;</span><span class="p">,</span><span class="s2">&quot;False&quot;</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">USE_CREDENTIALS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;USE_CREDENTIALS&quot;</span><span class="p">,</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">VALIDATE_CERTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VALIDATE_CERTS&quot;</span><span class="p">,</span><span class="s2">&quot;False&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -125,7 +125,7 @@
                 <section id="DB_NAME">
                     <div class="attr variable">
             <span class="name">DB_NAME</span>        =
-<span class="default_value">$DB_NAME</span>
+<span class="default_value">&#39;database.db&#39;</span>
 
         
     </div>
@@ -149,7 +149,7 @@
                 <section id="SECRET_KEY">
                     <div class="attr variable">
             <span class="name">SECRET_KEY</span>        =
-<span class="default_value">$SECRET_KEY</span>
+<span class="default_value">&#39;default_secret_key&#39;</span>
 
         
     </div>
@@ -173,7 +173,7 @@
                 <section id="CEILING_ACCOUNT">
                     <div class="attr variable">
             <span class="name">CEILING_ACCOUNT</span>        =
-<span class="default_value">&#39;50000&#39;</span>
+<span class="default_value">50000</span>
 
         
     </div>
@@ -185,7 +185,7 @@
                 <section id="MAIL_USERNAME">
                     <div class="attr variable">
             <span class="name">MAIL_USERNAME</span>        =
-<span class="default_value">$MAIL_FROM</span>
+<span class="default_value">&#39;default&#39;</span>
 
         
     </div>
@@ -197,7 +197,7 @@
                 <section id="MAIL_PASSWORD">
                     <div class="attr variable">
             <span class="name">MAIL_PASSWORD</span>        =
-<span class="default_value">$MAIL_PASSWORD</span>
+<span class="default_value">&#39;default&#39;</span>
 
         
     </div>
@@ -209,7 +209,7 @@
                 <section id="MAIL_FROM">
                     <div class="attr variable">
             <span class="name">MAIL_FROM</span>        =
-<span class="default_value">$MAIL_FROM</span>
+<span class="default_value">&#39;default@gmail.com&#39;</span>
 
         
     </div>
@@ -233,7 +233,7 @@
                 <section id="MAIL_SERVER">
                     <div class="attr variable">
             <span class="name">MAIL_SERVER</span>        =
-<span class="default_value">$MAIL_SERVER</span>
+<span class="default_value">&#39;default&#39;</span>
 
         
     </div>
@@ -245,7 +245,7 @@
                 <section id="MAIL_FROM_NAME">
                     <div class="attr variable">
             <span class="name">MAIL_FROM_NAME</span>        =
-<span class="default_value">$MAIL_FROM_NAME</span>
+<span class="default_value">&#39;default&#39;</span>
 
         
     </div>
