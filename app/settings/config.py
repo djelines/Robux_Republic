@@ -4,7 +4,7 @@ load_dotenv()
 
 DB_NAME = os.getenv("DB_NAME")
 ALGORITHM = os.getenv("ALGORITHM")
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY" ,"default_secret_key")
 BANK_NAME = os.getenv("BANK_NAME")
 CEILING_ACCOUNT = os.getenv("CEILING_ACCOUNT")
 
