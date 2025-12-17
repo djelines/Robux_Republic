@@ -10,5 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 # Install Uvicorn for running FastAPI applications
 RUN pip install uvicorn
+
+RUN chmod +x /app/run.sh
 # Define environment variable
-CMD ["./run.sh"]
+CMD ["/app/run.sh"]
