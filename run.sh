@@ -10,9 +10,8 @@ export PYTHONPATH=$PYTHONPATH:/app
 echo "🚀 Lancement des Schedulers en arrière-plan..."
 
 # LE "&" EST CRUCIAL ICI :
-python -m app.schelduler.finalize_transaction & 
-python -m app.schelduler.mail_send & 
-python -m app.schelduler.process_ceiling_account &
+python -m app.schelduler.finalize_transaction 
+
 
 echo "✅ Schedulers lancés. Démarrage de l'API..."
 
