@@ -25,7 +25,7 @@ def process_pending_transactions():
         pending_transactions = db_session.query(Transaction).filter(
             Transaction.status == "pending",
             Transaction.timestamp <= time_off  
-        ).with_for_update().all()
+        ).all()
 
 
         for transaction in pending_transactions:
