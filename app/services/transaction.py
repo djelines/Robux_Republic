@@ -18,6 +18,8 @@ from app.utils.utils import get_user
 def create_transaction(body: Transaction, background_tasks: BackgroundTasks, session: Session, get_user: get_user):
     """ Create a new transaction"""
     get_account_to = get_account(body.iban_to, get_user, session)
+    message_account_closed = "One of the accounts is closed"
+    message_insufficient_funds = "Insufficient funds"
     if body.iban_from == body.iban_to:
         raise HTTPException(status_code=400, detail="Cannot transfer to the same account")
     if body.amount <= 0:
@@ -26,9 +28,9 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     if body.action == ActionEnum.virement and "TowerTrump" not in body.iban_from:
         get_account_from = get_account(body.iban_from, get_user, session)
         if get_account_from.balance < body.amount:
-            raise HTTPException(status_code=400, detail="Insufficient funds")
+            raise HTTPException(status_code=400, detail=message_insufficient_funds)
         if get_account_from.is_closed or get_account_to.is_closed:
-            raise HTTPException(status_code=400, detail="One of the accounts is closed")
+            raise HTTPException(status_code=400, detail=message_account_closed)
         if not get_account_from or not get_account_to:
             raise HTTPException(status_code=404, detail="One of the accounts not found")
 
@@ -36,15 +38,15 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
         if body.iban_bank_from and body.iban_bank_from != "string":
             get_account_bank_from = get_account_bank_extern(body.iban_bank_from, session)
             if get_account_bank_from.balance < body.amount:
-                raise HTTPException(status_code=400, detail="Insufficient funds")
+                raise HTTPException(status_code=400, detail=message_insufficient_funds)
             if get_account_to.is_closed:
-                raise HTTPException(status_code=400, detail="One of the accounts is closed")
+                raise HTTPException(status_code=400, detail=message_account_closed)
         else:
             get_account_from = get_account_bank_extern(body.iban_from, session)
             if get_account_to.is_closed:
-                raise HTTPException(status_code=400, detail="One of the accounts is closed")
+                raise HTTPException(status_code=400, detail=message_account_closed)
             if get_account_from.balance < body.amount:
-                raise HTTPException(status_code=400, detail="Insufficient funds")
+                raise HTTPException(status_code=400, detail=message_insufficient_funds)
             if not get_account_from or not get_account_to:
                 raise HTTPException(status_code=404, detail="One of the accounts not found")
     else:

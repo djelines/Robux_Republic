@@ -19,6 +19,8 @@ from app.settings.schemas import Auth, User
 ######################
 #     Sign up
 ####################
+
+message_user = "User not found"
 def create_auth(body:Auth_create, session = Depends(get_session))-> Auth:
     """ Create authentication credentials for a user """
     existing_user = session.query(Auth).filter(Auth.email == body.email).first()
@@ -70,7 +72,7 @@ def get_all_information(user=Depends(get_user), session=Depends(get_session)):
     # Join Auth and User tables to get all information
     db_auth = session.query(Auth).filter(Auth.uid == uid).first()
     if not db_auth:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=message_user)
     db_user = session.query(User).filter(User.uid == uid).first()
     if not db_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
@@ -118,7 +120,7 @@ def update_email(uid:str , password:str, new_email:str , session=Depends(get_ses
     email_message = "Email already registered"
 
     if not auth_user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=message_user)
 
     if not verify_password(password, auth_user.password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
@@ -139,7 +141,7 @@ def update_user(uid: str, body: schemas.UserUpdate, session=Depends(get_session)
     db_user = session.query(User).filter(User.uid == uid).first()
     db_auth = session.query(Auth).filter(Auth.uid == uid).first()
     if not db_user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
 
     for key, value in body.dict(exclude_unset=True).items():
         
@@ -159,7 +161,7 @@ def update_password(uid:str , password:str, new_password:str , session=Depends(g
     auth_user = session.query(Auth).filter(Auth.uid == uid).first()
 
     if not auth_user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=message_user)
 
     if not verify_password(password, auth_user.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
