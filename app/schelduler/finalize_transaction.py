@@ -9,61 +9,84 @@ from app.models.models import ActionEnum
 from app.settings.database import engine
 from app.settings.schemas import Transaction, Bank_Account ,Bank_Extern
 
+from sqlalchemy.orm import sessionmaker
+from datetime import datetime, timedelta
+from fastapi import HTTPException
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+"""This module handles the periodic finalization of pending transactions"""
 
-""" This module handles the periodic finalization of pending transactions"""
+
+def get_account(session, iban, is_external=False):
+    """Fetch a bank account or external account by IBAN"""
+    model = Bank_Extern if is_external else Bank_Account
+    return session.query(model).filter(model.iban == iban).first()
+
+
+def process_transaction(session, transaction):
+    """Process a single transaction, return True if successful, False otherwise"""
+    error_deposit = False
+    error = False
+
+    # Determine source account
+    if transaction.action == ActionEnum.virement:
+        account_from = get_account(session, transaction.iban_from)
+    elif transaction.action == ActionEnum.deposite:
+        account_from = get_account(session, transaction.iban_from, is_external=True)
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown action: {transaction.action}")
+
+    # Determine destination account
+    account_to = get_account(session, transaction.iban_to)
+
+    # Optional bank account involvement
+    account_bank_from = None
+    if transaction.iban_bank_from:
+        account_bank_from = get_account(session, transaction.iban_bank_from, is_external=True)
+        if account_bank_from.balance < transaction.amount:
+            error_deposit = True
+        else:
+            account_bank_from.balance -= transaction.amount
+            account_from.balance += transaction.amount
+
+    # Check basic errors
+    if not error_deposit:
+        if account_from.balance < transaction.amount or account_to.is_closed:
+            error = True
+
+    # Apply transaction
+    if not error:
+        account_from.balance -= transaction.amount
+        account_to.balance += transaction.amount
+        transaction.status = "completed"
+    else:
+        transaction.status = "error"
+
+
 def process_pending_transactions():
-    error_deposite=False
-    global account_from
     db_session = SessionLocal()
-    error=False
-    
     try:
         time_off = datetime.now() - timedelta(seconds=5)
+        pending_transactions = (
+            db_session.query(Transaction)
+            .filter(Transaction.status == "pending", Transaction.timestamp <= time_off)
+            .with_for_update()
+            .all()
+        )
 
-        pending_transactions = db_session.query(Transaction).filter(
-            Transaction.status == "pending",
-            Transaction.timestamp <= time_off  
-        ).with_for_update().all()
-
-
-        for transaction in pending_transactions:
-            account_to = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_to).first()
-            
-            if transaction.action == ActionEnum.virement :
-                account_from = db_session.query(Bank_Account).filter(Bank_Account.iban == transaction.iban_from).first()
-           
-            elif transaction.action == ActionEnum.deposite :
-                account_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_from).first()
-                
-                if transaction.iban_bank_from is not None:
-                    account_bank_from = db_session.query(Bank_Extern).filter(Bank_Extern.iban == transaction.iban_bank_from).first()
-                    if account_bank_from.balance < transaction.amount:
-                        error_deposite=True
-                    if not error_deposite:
-                        account_bank_from.balance -= transaction.amount
-                        account_from.balance += transaction.amount
-            if not error_deposite:
-                if account_from.balance < transaction.amount:
-                    error=True
-                if account_to.is_closed:
-                    error=True
-
-                if not error:
-                    account_from.balance -= transaction.amount
-                    account_to.balance += transaction.amount
-                    transaction.status = "completed"
-                else:
-                    transaction.status = "error"
+        for tx in pending_transactions:
+            process_transaction(db_session, tx)
 
         db_session.commit()
 
     except Exception as e:
         db_session.rollback()
-        raise HTTPException(status_code=400, detail="Transaction processing error / " + str(e))
+        raise HTTPException(status_code=400, detail="Transaction processing error: " + str(e))
+
     finally:
         db_session.close()
+
 
 
 if __name__ == "__main__":
