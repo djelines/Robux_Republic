@@ -23,7 +23,7 @@ def create_auth(body:Auth_create, session = Depends(get_session))-> Auth:
     """ Create authentication credentials for a user """
     existing_user = session.query(Auth).filter(Auth.email == body.email).first()
     if existing_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="This user is already registered")
     new_auth = Auth(uid=body.uid, email=body.email, password=body.password)
     new_auth.password = hash_password(new_auth.password)
     session.add(new_auth)
@@ -46,7 +46,7 @@ def create_auth(body:Auth_create, session = Depends(get_session))-> Auth:
 def generate_token(auth: Auth):
     """ Generate a JWT token """
     payload = {"uid": auth.uid, "email": auth.email}
-    return jwt.encode(payload, secret_key, algorithm=algorithm)
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 def login(email: str, password: str, session):
     """ Login a user """
@@ -115,6 +115,7 @@ def get_email(uid: str, session=Depends(get_session)) -> str:
 def update_email(uid:str , password:str, new_email:str , session=Depends(get_session)) -> str:
     """ Update the email address of a user """
     auth_user = session.query(Auth).filter(Auth.uid == uid).first()
+    email_message = "Email already registered"
 
     if not auth_user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
@@ -123,11 +124,11 @@ def update_email(uid:str , password:str, new_email:str , session=Depends(get_ses
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect password")
 
     if new_email == auth_user.email:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=email_message)
 
     existing_user = session.query(Auth).filter(Auth.email == new_email).first()
     if existing_user and existing_user.uid != uid:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=email_message)
 
     auth_user.email = new_email
     session.commit()
@@ -163,8 +164,8 @@ def update_password(uid:str , password:str, new_password:str , session=Depends(g
     if not verify_password(password, auth_user.password):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Incorrect password")
 
-    if pdw_context.verify(new_password, auth_user.password):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Same password")
+    #if pdw_context.verify(new_password, auth_user.password):
+    #   raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Same password")
 
     auth_user.password = hash_password(new_password)
     session.commit()

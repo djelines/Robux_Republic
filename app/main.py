@@ -62,6 +62,8 @@ def delete_transaction():
     finally:
         # Fermez la session pour libérer la connexion
         session.close()
+    
+    
     # with Session(engine) as session:
     #     session.add(user1)
     #     session.add(user2)
