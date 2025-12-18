@@ -15,6 +15,5 @@ ENV PYTHONPATH=/app
 # Install Uvicorn for running FastAPI applications
 RUN pip install uvicorn
 
-EXPOSE 8000
 # Define environment variable
-CMD ["./run.sh"]
+CMD ["python", "app/main.py"]
