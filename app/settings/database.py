@@ -12,6 +12,7 @@ engine = create_engine(sqlite_url, echo=True, connect_args=connect_args)
 
 
 def create_db_and_tables():
+    """Create database and tables based on SQLModel metadata."""
     SQLModel.metadata.create_all(engine)
      
 def get_session():

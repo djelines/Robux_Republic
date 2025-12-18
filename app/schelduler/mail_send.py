@@ -17,6 +17,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 async def process_email_send():
+    """Process to send emails for completed transactions that haven't been notified yet."""
     with SessionLocal() as db_session:
         try:
             all_transactions = (

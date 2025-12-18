@@ -12,37 +12,46 @@ router = APIRouter(prefix="/auth", tags=["Authentification"])
 
 @router.get("/get_uid")
 def recover_uid(email: str, session=Depends(get_session)):
+    """route to recover user id based on email"""
     return get_uid(email, session)
 
 @router.get("/me")
 def get_user_profile(user=Depends(get_user), session=Depends(get_session)):
+    """route to get user profile"""
     return get_all_information(user, session)
 
 
 @router.get("/get_password")
 def recover_password(uid: str, user = Depends(get_user), session=Depends(get_session)):
+    """route to recover password based on uid"""
     return get_password(uid, session)
 
 @router.get("/get_email")
 def recover_email(uid: str, user = Depends(get_user), session=Depends(get_session)):
+    """route to recover email based on uid"""
     return get_email(uid, session)
 
 @router.post("/signup")
 def sign_up(body: Init_user_model, session = Depends(get_session)):
+    """route to create a new user"""
     return init_user(body, session=session)
 
 @router.post("/login")
 def log_in(email: str = Body(),password: str = Body(),session=Depends(get_session)):
+    """route to login a user"""
     return login(email, password, session)
 
 @router.put("/users/{uid}/email")
 def update_user_email(uid: str, password: str, new_email: str, user = Depends(get_user), session=Depends(get_session)):
+    """route to update user email"""
     return update_email(uid, password, new_email, session)
 
 @router.put("/users/{uid}/password")
 def update_user_password(uid: str, password: str, new_password: str, user = Depends(get_user), session=Depends(get_session)):
+    """route to update user password"""
     return update_password(uid, password, new_password, session)
 
 @router.put("/users/{uid}/profile")
 def update_user_profile(uid: str, body: schemas.UserUpdate, user = Depends(get_user), session=Depends(get_session)):
+    """route to update user profile"""
     return update_user(uid, body, session)

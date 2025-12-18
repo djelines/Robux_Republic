@@ -8,6 +8,7 @@ from app.settings.schemas import Auth, Bank_Account, User_Bank_Account
 
 
 class Bank_Account_create(BaseModel):
+    """Model for Bank_account"""
     is_principal: Optional[bool] = False
     is_closed: Optional[bool] = False
     iban: Optional[str] = None
@@ -16,8 +17,9 @@ class Bank_Account_create(BaseModel):
     id_bank: Optional[int] = None
     bank_account_id: Optional[int] = None
     name: Optional[str] = None
-    
+
 class Auth_create(BaseModel):
+    """Model for Auth"""
     uid: Optional[str] = None
     email: str
     password: str
@@ -26,5 +28,6 @@ class Auth_create(BaseModel):
     address: str
 
 class Init_User(BaseModel):
+    """Model for initializing User with Auth and Bank_account"""
     auth: Auth_create
     bank_account: Bank_Account_create

@@ -15,6 +15,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def process_ceiling_accounts():
+    """Process bank accounts that exceed the ceiling limit and transfer excess to principal account."""
     with SessionLocal() as db_session:
         try:
              # Retrieve all non-principal accounts exceeding the ceiling

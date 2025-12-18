@@ -1,3 +1,4 @@
+# Docker Compose configuration file
 services:
   backend:
     build:
@@ -16,7 +17,7 @@ services:
       - PYTHONPATH=/app
     networks:
       - reseau_partage
-
+  #  scheduler_finalize service
   scheduler_finalize:
     build: ./
     container_name: scheduler_finalize
@@ -30,7 +31,7 @@ services:
       - PYTHONPATH=/app
     networks:
       - reseau_partage
-
+  #  scheduler_mail service
   scheduler_mail:
     build: ./
     container_name: scheduler_mail
@@ -44,7 +45,7 @@ services:
       - PYTHONPATH=/app
     networks:
       - reseau_partage
-
+# Define external network
 networks:
   reseau_partage:
     external: true

@@ -12,8 +12,8 @@ from app.settings.schemas import Transaction, Bank_Account ,Bank_Extern
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-""" This module handles the periodic finalization of pending transactions"""
 def process_pending_transactions():
+    """ This module handles the periodic finalization of pending transactions"""
     error_deposite=False
     global account_from
     db_session = SessionLocal()
