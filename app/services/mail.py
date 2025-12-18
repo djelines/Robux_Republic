@@ -28,6 +28,7 @@ from fastapi_mail import MessageSchema
 
 
 async def simple_send(email: EmailSchema, message: str) -> JSONResponse:
+    """Function to send an email with HTML content including RobuxBank branding."""
     html_content = f"""
     <!DOCTYPE html>
     <html>

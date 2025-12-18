@@ -9,23 +9,27 @@ class ActionEnum(str, Enum):
     deposite = "depot"
 
 class User(BaseModel):
+    """User model."""
     uid: str
     first_name: str
     last_name: str
     address: str
 
 class Auth(BaseModel):
+    """Auth model."""
     #uid: str
     email: str
     password: str
 
 class Bank_Account(BaseModel):
+    """Bank Account model."""
     is_principal: bool = False
     is_closed: bool = False
     iban: str
     balance: decimal.Decimal = 0.0
 
 class User_Bank_Account(BaseModel):
+    """User Bank Account model."""
     uid: str
     bank_id:int
     bank_account_id: Optional[int] = None
@@ -33,6 +37,7 @@ class User_Bank_Account(BaseModel):
     creation_date: datetime
 
 class Transaction(BaseModel):
+    """Transaction model."""
     iban_from: str
     iban_to: str
     iban_bank_from : Optional[str] = None
@@ -46,11 +51,13 @@ class Transaction(BaseModel):
 
 
 class Beneficiary(BaseModel):
+    """Beneficiary model."""
     name: str
     iban_to: str
     creation_date: datetime = datetime.now()
 
 class Bank_Account_Info(BaseModel):
+    """Bank Account Info model."""
     id: int
     is_principal: bool
     is_closed: bool
@@ -60,6 +67,7 @@ class Bank_Account_Info(BaseModel):
     creation_date: datetime
 
 class Bank_Extern(BaseModel):
+    """Bank Extern model."""
     id: int
     name: str
     iban: str
@@ -67,6 +75,7 @@ class Bank_Extern(BaseModel):
     balance: decimal.Decimal
 
 class UserUpdate(BaseModel):
+    """User update model."""
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[str] = None

@@ -10,6 +10,7 @@ from app.models.models import ActionEnum
 
 
 class User (SQLModel , table=True):
+    """User table schema."""
     uid : str = Field(index=True, unique=True)
     id: Optional[int] = Field(default=None, primary_key=True)
     first_name: str
@@ -17,12 +18,14 @@ class User (SQLModel , table=True):
     address : str
     
 class Auth (SQLModel , table=True):
+    """Auth table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     uid : str = Field(index=True, unique=True , foreign_key="user.uid")
     email : str = Field(index=True, unique=True)
     password : str
     
 class Bank_Account (SQLModel , table=True):
+    """Bank_Account table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     is_principal : bool = Field(default=False)
     is_closed : bool = Field(default=False)
@@ -30,6 +33,7 @@ class Bank_Account (SQLModel , table=True):
     balance : decimal.Decimal = Field(default=0.0)
     
 class User_Bank_Account (SQLModel , table=True):
+    """User_Bank_Account table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     bank_id:int = Field(index=True, foreign_key="bank_extern.id")
     uid : str = Field(index=True , foreign_key="user.uid")
@@ -38,6 +42,7 @@ class User_Bank_Account (SQLModel , table=True):
     creation_date: datetime = Field(default_factory=datetime.now)
 
 class Transaction (SQLModel , table=True):
+    """Transaction table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     iban_from : str = Field(index=True, foreign_key="bank_account.iban")
     iban_to : str = Field(index=True, foreign_key="bank_account.iban")
@@ -52,6 +57,7 @@ class Transaction (SQLModel , table=True):
 
     
 class Beneficiary (SQLModel , table=True):
+    """Beneficiary table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     name : str = Field(index=True)
     uid : str = Field(index=True , foreign_key="user.uid")
@@ -59,6 +65,7 @@ class Beneficiary (SQLModel , table=True):
     creation_date: datetime = Field(default_factory=datetime.now)
     
 class Bank_Extern(SQLModel,table=True):
+    """Bank_Extern table schema."""
     id: Optional[int] = Field(default=None, primary_key=True)
     is_main: bool = Field(default=False)
     name: str
@@ -66,6 +73,7 @@ class Bank_Extern(SQLModel,table=True):
     balance: decimal.Decimal = Field(default=999999999999.0 , index=True)
 
 class UserUpdate(BaseModel):
+    """User update schema."""
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[str] = None

@@ -15,6 +15,7 @@ router = APIRouter(prefix="/bank_account", tags=["BankAccount"])
     
 @router.get("/mother-bank-account")
 def get_mother_bank_account(session=Depends(get_session), get_user= Depends(get_user)):
+    """get the main bank extern account"""
     response = get_main_bank_extern(session)
 
     if response:
@@ -24,6 +25,7 @@ def get_mother_bank_account(session=Depends(get_session), get_user= Depends(get_
 
 @router.get("/{iban}")
 def get_bank_account(iban: str, session=Depends(get_session), get_user= Depends(get_user)):
+    """get a bank account based on iban"""
     response = get_account(iban, get_user ,session)
     if response:
         return response
@@ -31,6 +33,7 @@ def get_bank_account(iban: str, session=Depends(get_session), get_user= Depends(
 
 @router.get("/all-bank-accounts/{uid}")
 def get_all_bank_account_of_user(uid: str, group_by: str = None, session=Depends(get_session), get_user= Depends(get_user)):
+    """get all bank accounts of a user based on uid"""
     response = get_all_accounts(uid, group_by, get_user,session)
 
     if response:
@@ -38,6 +41,7 @@ def get_all_bank_account_of_user(uid: str, group_by: str = None, session=Depends
 
 @router.post("")
 def create_bank_account_route(body: Bank_Account_create, session=Depends(get_session), get_user= Depends(get_user)):
+    """create a bank account for a user"""
     response = create_bank_account(body, get_user ,session)
 
     print(response)
@@ -49,6 +53,7 @@ def create_bank_account_route(body: Bank_Account_create, session=Depends(get_ses
 
 @router.put("/close/{iban}")
 def close_bank_account(iban: str, session=Depends(get_session), get_user = Depends(get_user)):
+    """close a bank account based on iban"""
     return close_account(iban, get_user, session)
 
 
