@@ -141,9 +141,9 @@ def get_iban_from(id: int, get_user: get_user, session=Depends(get_session)):
 ######################
 #     Get Iban Of Beneficiary Account
 ####################
-def get_iban_to(id: int, session=Depends(get_session)):
+def get_iban_to(id: int, get_user: get_user, session=Depends(get_session)):
     """ Get the IBAN of the beneficiary's account """
-    transaction = get_transaction(id, session)
+    transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.iban_to
 
@@ -151,9 +151,9 @@ def get_iban_to(id: int, session=Depends(get_session)):
 ######################
 #     Get transaction amount
 ####################
-def get_amount(id: int, session=Depends(get_session)):
+def get_amount(id: int, get_user: get_user, session=Depends(get_session)):
     """ Get the amount of the transaction """
-    transaction = get_transaction(id, session)
+    transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.amount
 
@@ -161,9 +161,9 @@ def get_amount(id: int, session=Depends(get_session)):
 ######################
 #     Get transaction action
 ####################
-def get_action(id: int, session=Depends(get_session)):
+def get_action(id: int, get_user: get_user, session=Depends(get_session)):
     """ Get the action of the transaction """
-    transaction = get_transaction(id, session)
+    transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.action
 
@@ -171,9 +171,9 @@ def get_action(id: int, session=Depends(get_session)):
 ######################
 #     Get Transaction date
 ####################
-def get_date(id: int, session=Depends(get_session)):
+def get_date(id: int, get_user: get_user, session=Depends(get_session)):
     """ Get the date of the transaction """
-    transaction = get_transaction(id, session)
+    transaction = get_transaction(id, get_user, session)
     if transaction:
         return transaction.timestamp
 
