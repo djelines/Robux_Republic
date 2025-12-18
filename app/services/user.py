@@ -8,6 +8,7 @@ from app.utils.utils import check_user_password
 ######################
 #     CRUD
 ######################
+message_user = "User not found"
 
 def create_user(body: Auth_create, session=Depends(get_session)) -> User | None:
     """ Create a new user """
@@ -32,7 +33,7 @@ def get_first_name(uid: str, session=Depends(get_session)):
     if user:
         return user.first_name
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
 
 def get_last_name(uid: str, session=Depends(get_session)):
     """ Get the last name of a user """
@@ -40,7 +41,7 @@ def get_last_name(uid: str, session=Depends(get_session)):
     if user:
         return user.last_name
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
 
 def get_address(uid: str, session=Depends(get_session)):
     """ Get the address of a user """
@@ -48,13 +49,13 @@ def get_address(uid: str, session=Depends(get_session)):
     if user:
         return user.address
     else:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
     
 def update_first_name(uid: str, password:str, new_first_name: str, session=Depends(get_session)):
     """ Update the first name of a user """
     user = session.query(User).filter(User.uid == uid).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
     if not new_first_name or new_first_name.strip() == "":
         raise HTTPException(status_code=400, detail="Invalid first name")
     
@@ -70,7 +71,7 @@ def update_last_name(uid: str, password:str, new_last_name: str, session=Depends
     """ Update the last name of a user """
     user = session.query(User).filter(User.uid == uid).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
     if not new_last_name or new_last_name.strip() == "":
         raise HTTPException(status_code=400, detail="Invalid last name")
     
@@ -86,7 +87,7 @@ def update_address(uid: str, password:str, new_address: str, session=Depends(get
     """ Update the address of a user """
     user = session.query(User).filter(User.uid == uid).first()
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail=message_user)
     if not new_address or new_address.strip() == "":
         raise HTTPException(status_code=400, detail="Invalid address")
     
