@@ -5,23 +5,28 @@ services:
       dockerfile: Dockerfile
     container_name: fastapi_app
     restart: always
+    # Map container port 8000 to host port 8000 for API access
     ports:
       - "8000:8000"
     env_file:
       - .env
+    # Persist SQLite data by mounting a host directory
     volumes:
       - ./data:/app/sql_data
     environment:
       - DB_NAME=/app/sql_data/database.db
+    # Attach to the shared network to communicate with other services
     networks:
       - reseau_partage
 
   scheduler_finalize:
     build: ./
     container_name: scheduler_finalize
+    # Run the transaction finalization script on startup
     command: python -m app.schelduler.finalize_transaction
     restart: always
     env_file: .env
+    # Use the same volume to share the SQLite file with the backend
     volumes:
       - ./data:/app/sql_data
     environment:
@@ -32,6 +37,7 @@ services:
   scheduler_mail:
     build: ./
     container_name: scheduler_mail
+    # Run the automated mail sending script
     command: python -m app.schelduler.mail_send
     restart: always
     env_file: .env
@@ -43,6 +49,7 @@ services:
       - reseau_partage
 
 networks:
+  # Use an existing external network for cross-project communication
   reseau_partage:
     external: true
     name: global_network
