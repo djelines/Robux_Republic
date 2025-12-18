@@ -11,6 +11,5 @@ EXPOSE 8000
 # Install Uvicorn for running FastAPI applications
 RUN pip install uvicorn
 
-RUN chmod +x /app/run.sh
 # Define environment variable
-CMD ["/app/run.sh"]
+CMD ["python", "app/main.py"]
