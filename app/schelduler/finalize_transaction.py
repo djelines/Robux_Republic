@@ -67,6 +67,7 @@ def process_pending_transactions():
 
 
 if __name__ == "__main__":
+    print("🚀 SCHEDULER BOOT: Démarrage du processus de finalisation...")
     scheduler = BlockingScheduler()
     scheduler.add_job(process_pending_transactions, 'interval', seconds=5)
 
