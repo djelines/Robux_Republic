@@ -11,4 +11,4 @@ EXPOSE 8000
 # Install Uvicorn for running FastAPI applications
 RUN pip install uvicorn
 # Define environment variable
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["./run.sh"]
