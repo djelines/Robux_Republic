@@ -127,16 +127,18 @@
 </span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>    <span class="k">finally</span><span class="p">:</span>
 </span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="c1"># Fermez la session pour libérer la connexion</span>
 </span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    <span class="c1"># with Session(engine) as session:</span>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="c1">#     session.add(user1)</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="c1">#     session.add(user2)</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="c1">#     session.add(bank_account1)</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="c1">#     session.add(bank_account2)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="c1">#     session.add(user_bank_account1)</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="c1">#     session.add(user_bank_account2)</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="c1">#     session.commit()</span>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="c1"># return {&quot;message&quot;: &quot;Database and tables created, sample data inserted.&quot;}</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    
+</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>    
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    
+</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a>    <span class="c1"># with Session(engine) as session:</span>
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>    <span class="c1">#     session.add(user1)</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>    <span class="c1">#     session.add(user2)</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>    <span class="c1">#     session.add(bank_account1)</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="c1">#     session.add(bank_account2)</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>    <span class="c1">#     session.add(user_bank_account1)</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="c1">#     session.add(user_bank_account2)</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>    <span class="c1">#     session.commit()</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>    <span class="c1"># return {&quot;message&quot;: &quot;Database and tables created, sample data inserted.&quot;}</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    
 </span></pre></div>
 
 
@@ -226,15 +228,17 @@
 </span><span id="delete_transaction-63"><a href="#delete_transaction-63"><span class="linenos">63</span></a>    <span class="k">finally</span><span class="p">:</span>
 </span><span id="delete_transaction-64"><a href="#delete_transaction-64"><span class="linenos">64</span></a>        <span class="c1"># Fermez la session pour libérer la connexion</span>
 </span><span id="delete_transaction-65"><a href="#delete_transaction-65"><span class="linenos">65</span></a>        <span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</span><span id="delete_transaction-66"><a href="#delete_transaction-66"><span class="linenos">66</span></a>    <span class="c1"># with Session(engine) as session:</span>
-</span><span id="delete_transaction-67"><a href="#delete_transaction-67"><span class="linenos">67</span></a>    <span class="c1">#     session.add(user1)</span>
-</span><span id="delete_transaction-68"><a href="#delete_transaction-68"><span class="linenos">68</span></a>    <span class="c1">#     session.add(user2)</span>
-</span><span id="delete_transaction-69"><a href="#delete_transaction-69"><span class="linenos">69</span></a>    <span class="c1">#     session.add(bank_account1)</span>
-</span><span id="delete_transaction-70"><a href="#delete_transaction-70"><span class="linenos">70</span></a>    <span class="c1">#     session.add(bank_account2)</span>
-</span><span id="delete_transaction-71"><a href="#delete_transaction-71"><span class="linenos">71</span></a>    <span class="c1">#     session.add(user_bank_account1)</span>
-</span><span id="delete_transaction-72"><a href="#delete_transaction-72"><span class="linenos">72</span></a>    <span class="c1">#     session.add(user_bank_account2)</span>
-</span><span id="delete_transaction-73"><a href="#delete_transaction-73"><span class="linenos">73</span></a>    <span class="c1">#     session.commit()</span>
-</span><span id="delete_transaction-74"><a href="#delete_transaction-74"><span class="linenos">74</span></a>    <span class="c1"># return {&quot;message&quot;: &quot;Database and tables created, sample data inserted.&quot;}</span>
+</span><span id="delete_transaction-66"><a href="#delete_transaction-66"><span class="linenos">66</span></a>    
+</span><span id="delete_transaction-67"><a href="#delete_transaction-67"><span class="linenos">67</span></a>    
+</span><span id="delete_transaction-68"><a href="#delete_transaction-68"><span class="linenos">68</span></a>    <span class="c1"># with Session(engine) as session:</span>
+</span><span id="delete_transaction-69"><a href="#delete_transaction-69"><span class="linenos">69</span></a>    <span class="c1">#     session.add(user1)</span>
+</span><span id="delete_transaction-70"><a href="#delete_transaction-70"><span class="linenos">70</span></a>    <span class="c1">#     session.add(user2)</span>
+</span><span id="delete_transaction-71"><a href="#delete_transaction-71"><span class="linenos">71</span></a>    <span class="c1">#     session.add(bank_account1)</span>
+</span><span id="delete_transaction-72"><a href="#delete_transaction-72"><span class="linenos">72</span></a>    <span class="c1">#     session.add(bank_account2)</span>
+</span><span id="delete_transaction-73"><a href="#delete_transaction-73"><span class="linenos">73</span></a>    <span class="c1">#     session.add(user_bank_account1)</span>
+</span><span id="delete_transaction-74"><a href="#delete_transaction-74"><span class="linenos">74</span></a>    <span class="c1">#     session.add(user_bank_account2)</span>
+</span><span id="delete_transaction-75"><a href="#delete_transaction-75"><span class="linenos">75</span></a>    <span class="c1">#     session.commit()</span>
+</span><span id="delete_transaction-76"><a href="#delete_transaction-76"><span class="linenos">76</span></a>    <span class="c1"># return {&quot;message&quot;: &quot;Database and tables created, sample data inserted.&quot;}</span>
 </span></pre></div>
 
 
