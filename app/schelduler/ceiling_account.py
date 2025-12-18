@@ -99,4 +99,4 @@ if __name__ == "__main__":
         process_ceiling_accounts() 
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
-        pass
+        raise 

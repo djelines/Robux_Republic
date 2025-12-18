@@ -74,4 +74,4 @@ if __name__ == "__main__":
         process_pending_transactions() 
         scheduler.start()
     except (KeyboardInterrupt, SystemExit):
-        pass
+        raise 
