@@ -50,9 +50,6 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
 
-    if body.action != ActionEnum.deposite and body.iban_bank_from is None:
-        body.iban_bank_from = "None"
-
     if body.name == "" or body.name == "string":
         body.name = f"{body.action.name} de {body.amount} robux"
 
