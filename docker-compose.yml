@@ -13,6 +13,7 @@ services:
       - ./data:/app/sql_data
     environment:
       - DB_NAME=/app/sql_data/database.db
+      - PYTHONPATH=/app
     networks:
       - reseau_partage
 
@@ -26,6 +27,7 @@ services:
       - ./data:/app/sql_data
     environment:
       - DB_NAME=/app/sql_data/database.db
+      - PYTHONPATH=/app
     networks:
       - reseau_partage
 
@@ -39,6 +41,7 @@ services:
       - ./data:/app/sql_data
     environment:
       - DB_NAME=/app/sql_data/database.db
+      - PYTHONPATH=/app
     networks:
       - reseau_partage
 
