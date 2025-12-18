@@ -1,6 +1,7 @@
 #!/bin/bash
 
-mkdir -p /app/data
+mkdir -p /tmp/sql_data
+chmod 777 /tmp/sql_data
 
 python -m app.schelduler.finalize_transaction &
 

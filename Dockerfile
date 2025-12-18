@@ -6,9 +6,11 @@ WORKDIR /app
 COPY . .
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
 # Install Uvicorn for running FastAPI applications
 RUN pip install uvicorn
-# Define environment variable
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Ensure the run.sh script is executable
+RUN chmod +x run.sh
+# Set environment variable for Python path
+ENV PYTHONPATH=/app
+# Run run.sh when the container launches
+CMD ["./run.sh"]
