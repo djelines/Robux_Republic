@@ -61,25 +61,25 @@ def test_login_success(test_db_session, test_user):
     assert user is not None , "Login failed when it should have succeeded"
 
 
-# def test_login_password_error(test_db_session, test_user):
-#     from app.services.auth import login
+def test_login_password_error(test_db_session, test_user):
+    from app.services.auth import login
 
 
-#     user = login(
-#         test_user.email,
-#         "wrongpassword",
-#         test_db_session
-#     )
-#     assert user is not None , "Login should fail with incorrect password"
+    user = login(
+        test_user.email,
+        "wrongpassword",
+        test_db_session
+    )
+    assert user is not None , "Login should fail with incorrect password"
 
 
-# def test_login_email_error(test_db_session, test_user):
-#     from app.services.auth import login
+def test_login_email_error(test_db_session, test_user):
+    from app.services.auth import login
 
 
-#     user = login(
-#         "wrongemail@gmail.com"
-#         "testpassword",
-#         test_db_session
-#     )
-#     assert user is not None , "Login should fail with incorrect email"
+    user = login(
+        "wrongemail@gmail.com"
+        "testpassword",
+        test_db_session
+    )
+    assert user is not None , "Login should fail with incorrect email"
