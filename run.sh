@@ -7,9 +7,8 @@ chmod 777 /tmp/sql_data
 export PYTHONPATH=$PYTHONPATH:/app
 
 # Start schedulers in the background
-# python -m app.schelduler.finalize_transaction & 
-# python -m app.schelduler.mail_send & 
-python -m app.schelduler.worker &
+python -m app.schelduler.finalize_transaction & 
+python -m app.schelduler.mail_send & 
 python -m app.schelduler.process_ceiling_account &
 
 # Start the FastAPI application with Uvicorn
