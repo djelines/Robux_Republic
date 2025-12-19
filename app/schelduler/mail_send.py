@@ -4,10 +4,7 @@ from datetime import datetime, timedelta
 from app.services.mail import EmailSchema, simple_send
 from sqlalchemy.orm import sessionmaker
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-# Importation de BlockingScheduler enlevée car remplacée par AsyncIOScheduler
-# from fastapi import HTTPException # Import inutile, enlevé
-# Importation de modèles et services
-from app.models.models import ActionEnum # Assurez-vous que tous les imports sont nécessaires et corrects
+from app.models.models import ActionEnum 
 from app.services.user_bank_account import get_all_accounts
 from app.settings.database import engine
 from app.settings.schemas import Transaction, Bank_Account ,Bank_Extern, User_Bank_Account,Auth
