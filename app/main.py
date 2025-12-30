@@ -32,7 +32,7 @@ app.include_router(authentification_router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Hello, FastAPI fonctionne et le devops aussi!"}
+    return {"message": "Hello, FastAPI fonctionne !"}
 
 @app.on_event("startup")
 def on_startup():
