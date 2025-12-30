@@ -20,6 +20,12 @@ jobs:
       - name: Run Tests
         run: pytest
       - name: Generate Doc
+        env:
+            MAIL_USERNAME: "temp"
+            MAIL_PASSWORD: "temp"
+            MAIL_SERVER: "localhost"
+            MAIL_FROM: "temp@temp.com"
+            DATABASE_URL: "postgresql://user:pass@localhost/db"
         run: pdoc app routes tests -o documentation 
       - name: Deploy Doc
         run: |
