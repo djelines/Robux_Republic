@@ -2,7 +2,7 @@ name: CI/CD Backend Bank
 
 on:
   push:
-    branches: [ "production", "main" ] # Déclenche sur les deux branches
+    branches: [ "production" ]
 
 jobs:
   test:
