@@ -14,14 +14,14 @@ def bank_extern_create(session : Session):
     if not bank_exist:
         bank_main = Bank_Extern(
             is_main=True,
-            name="Robux",
-            iban="FR7612345678901234567890123RobuxBankTowerTrump",
+            name="Banque Republic",
+            iban="FR7612345678901234567890123BanqueRepublic",
             balance=999999999999.0
         )
         mega_bank = Bank_Extern(
             is_main=False,
             name="Mega Bank",
-            iban="FR7612345678901234567890123MegaBankTowerGretaThunberg",
+            iban="FR7612345678901234567890123MegaBank",
             balance=100000000.0
 
             ) 

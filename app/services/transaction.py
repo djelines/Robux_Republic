@@ -53,7 +53,7 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     iban_bank = body.iban_bank_from if body.iban_bank_from != "string" else None
 
     if not body.name or body.name == "string":
-        body.name = f"{body.action.name} de {body.amount} robux"
+        body.name = f"{body.action.name} de {body.amount} banque"
 
     transaction = Transaction(
         iban_from=body.iban_from,

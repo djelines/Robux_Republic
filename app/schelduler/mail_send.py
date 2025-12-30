@@ -23,7 +23,7 @@ def get_pro_template(title, message, amount, iban_source, iban_dest):
                     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 500px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                         <tr>
                             <td style="padding: 30px 40px; text-align: left; border-bottom: 1px solid #f0f0f0;">
-                                <div style="font-size: 20px; font-weight: 700; color: #1a1f36; letter-spacing: -0.5px;">Robux Republic</div>
+                                <div style="font-size: 20px; font-weight: 700; color: #1a1f36; letter-spacing: -0.5px;">Banque Republic</div>
                             </td>
                         </tr>
                         <tr>
@@ -51,7 +51,7 @@ def get_pro_template(title, message, amount, iban_source, iban_dest):
                             <td style="padding: 0 40px 40px; text-align: center;">
                                 <p style="font-size: 13px; color: #697386; margin: 0 0 16px;">Ceci est une notification automatique. Merci de ne pas répondre.</p>
                                 <div style="height: 1px; background-color: #e3e8ee; margin-bottom: 20px;"></div>
-                                <div style="font-size: 12px; color: #a3acb9;">&copy; 2025 robux-republic.micdev.fr | Robux Republic System</div>
+                                <div style="font-size: 12px; color: #a3acb9;">&copy; 2025 banque-republic.micdev.fr | Banque Republic System</div>
                             </td>
                         </tr>
                     </table>

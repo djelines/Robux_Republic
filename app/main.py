@@ -22,7 +22,7 @@ app.include_router(users_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://robux-republic.micdev.fr", "http://localhost:5173"],
+    allow_origins=["https://banque-republic.micdev.fr", "http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

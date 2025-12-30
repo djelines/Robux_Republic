@@ -73,7 +73,7 @@ async def simple_send(email: EmailSchema, message: str) -> JSONResponse:
     <body>
         <div class="container">
             <div class="header">
-                <h1>RobuxBank 🏦</h1>
+                <h1>Banque Republic🏦</h1>
             </div>
             
             <p>Cher client,</p>
@@ -85,7 +85,7 @@ async def simple_send(email: EmailSchema, message: str) -> JSONResponse:
             </div>
             <div class="signature">
                 <p>Cordialement,</p>
-                <p>L'équipe Support RobuxBank</p>
+                <p>L'équipe Support Banque Republic</p>
             </div>
         </div>
     </body>
@@ -94,7 +94,7 @@ async def simple_send(email: EmailSchema, message: str) -> JSONResponse:
     
 
     message_schema = MessageSchema(
-        subject="Notification de la RobuxBank",
+        subject="Notification de la Banque Republic",
         recipients=email.dict().get("email"),
         body=html_content,  
         subtype="html"    
