@@ -50,16 +50,15 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     else:
         raise HTTPException(status_code=400, detail="Invalid action")
 
-    if body.action != ActionEnum.deposite and body.iban_bank_from is None:
-        body.iban_bank_from = "None"
+    iban_bank = body.iban_bank_from if body.iban_bank_from != "string" else None
 
-    if body.name == "" or body.name == "string":
+    if not body.name or body.name == "string":
         body.name = f"{body.action.name} de {body.amount} robux"
 
     transaction = Transaction(
         iban_from=body.iban_from,
         iban_to=body.iban_to,
-        iban_bank_from=body.iban_bank_from,
+        iban_bank_from=iban_bank,
         amount=body.amount,
         action=body.action,
         name=body.name,
@@ -69,8 +68,11 @@ def create_transaction(body: Transaction, background_tasks: BackgroundTasks, ses
     session.commit()
     session.refresh(transaction)
 
-    return {"message": "Transaction initiated, pending finalization.", "transaction_id": transaction.id,
-            "iban_bank_from": transaction.iban_bank_from}
+    return {
+        "message": "Transaction initiated, pending finalization.", 
+        "transaction_id": transaction.id,
+        "iban_bank_from": transaction.iban_bank_from
+    }
 
 
 ###########################

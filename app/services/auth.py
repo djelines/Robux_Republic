@@ -19,21 +19,37 @@ from app.settings.schemas import Auth, User
 ######################
 #     Sign up
 ####################
-def create_auth(body:Auth_create, session = Depends(get_session))-> Auth:
+def create_auth(body: Auth_create, session = Depends(get_session)) -> dict:
     """ Create authentication credentials for a user """
+    
     existing_user = session.query(Auth).filter(Auth.email == body.email).first()
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
-    new_auth = Auth(uid=body.uid, email=body.email, password=body.password)
-    new_auth.password = hash_password(new_auth.password)
-    session.add(new_auth)
-    session.flush()
     
-    new_user = create_user(User(uid=new_auth.uid, first_name=body.first_name, last_name=body.last_name, address=body.address), session)
+    user_uid = body.uid if body.uid else str(uuid.uuid4())
+    
+    new_user = User(
+        uid=user_uid, 
+        first_name=body.first_name, 
+        last_name=body.last_name, 
+        address=body.address
+    )
+    session.add(new_user)
+    
+    session.flush() 
+
+    new_auth = Auth(
+        uid=user_uid, 
+        email=body.email, 
+        password=hash_password(body.password)
+    )
+    session.add(new_auth)
     
     session.commit()
+    
     session.refresh(new_auth)
     session.refresh(new_user)
+    
     return {
         "auth": new_auth,
         "user": new_user
