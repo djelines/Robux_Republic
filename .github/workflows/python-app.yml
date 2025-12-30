@@ -2,7 +2,7 @@ name: CI/CD Backend Bank
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "production", "main" ] # Déclenche sur les deux branches
 
 jobs:
   test:
@@ -30,8 +30,11 @@ jobs:
           git push
 
   build-and-push:
-    needs: test # Ne build que si les tests passent !
+    needs: test # Sécurité : Ne build que si les tests passent !
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Indispensable pour pousser sur GHCR
     steps:
       - uses: actions/checkout@v4
       - name: Login to GHCR
@@ -45,4 +48,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/backendbank:latest
+          # On utilise le chemin exact de l'image de djelines
+          tags: ghcr.io/djelines/robux_republic/backendbank:latest

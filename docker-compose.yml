@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ghcr.io/bourletmateis/backendbank:latest
+    image: ghcr.io/djelines/robux_republic/backendbank:latest
     container_name: fastapi_app
     restart: always
     ports:
