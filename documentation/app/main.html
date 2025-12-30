@@ -79,7 +79,7 @@
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">redirect_slashes</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">transactions_router</span><span class="p">)</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">bank_account_router</span><span class="p">)</span>
 </span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">beneficiaires_router</span><span class="p">)</span>
@@ -87,7 +87,7 @@
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>
 </span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="n">app</span><span class="o">.</span><span class="n">add_middleware</span><span class="p">(</span>
 </span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="n">CORSMiddleware</span><span class="p">,</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>    <span class="n">allow_origins</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;https://banque-republic.micdev.fr&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:5173&quot;</span><span class="p">],</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>    <span class="n">allow_credentials</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 </span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="n">allow_methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="n">allow_headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;*&quot;</span><span class="p">],</span>

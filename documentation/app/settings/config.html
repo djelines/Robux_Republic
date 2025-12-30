@@ -55,13 +55,13 @@
                     <a class="variable" href="#MAIL_FROM">MAIL_FROM</a>
             </li>
             <li>
-                    <a class="variable" href="#MAIL_PORT">MAIL_PORT</a>
-            </li>
-            <li>
                     <a class="variable" href="#MAIL_SERVER">MAIL_SERVER</a>
             </li>
             <li>
                     <a class="variable" href="#MAIL_FROM_NAME">MAIL_FROM_NAME</a>
+            </li>
+            <li>
+                    <a class="variable" href="#MAIL_PORT">MAIL_PORT</a>
             </li>
             <li>
                     <a class="variable" href="#MAIL_STARTTLS">MAIL_STARTTLS</a>
@@ -106,18 +106,18 @@
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="n">BANK_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BANK_NAME&quot;</span> <span class="p">,</span><span class="s2">&quot;Robux&quot;</span><span class="p">)</span>
 </span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="n">CEILING_ACCOUNT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CEILING_ACCOUNT&quot;</span><span class="p">,</span> <span class="mi">50000</span><span class="p">)</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a> <span class="c1"># Email configuration</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">MAIL_USERNAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_USERNAME&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="n">MAIL_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PASSWORD&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">MAIL_FROM</span> <span class="o">=</span>   <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM&quot;</span> <span class="p">,</span><span class="s2">&quot;default@gmail.com&quot;</span><span class="p">)</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="n">MAIL_PORT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PORT&quot;</span> <span class="p">,</span><span class="s2">&quot;587&quot;</span><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">MAIL_SERVER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SERVER&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="n">MAIL_FROM_NAME</span><span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM_NAME&quot;</span> <span class="p">,</span><span class="s2">&quot;default&quot;</span><span class="p">)</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">MAIL_STARTTLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_STARTTLS&quot;</span><span class="p">,</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">MAIL_SSL_TLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SSL_TLS&quot;</span><span class="p">,</span><span class="s2">&quot;False&quot;</span><span class="p">)</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">USE_CREDENTIALS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;USE_CREDENTIALS&quot;</span><span class="p">,</span><span class="s2">&quot;True&quot;</span><span class="p">)</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">VALIDATE_CERTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VALIDATE_CERTS&quot;</span><span class="p">,</span><span class="s2">&quot;False&quot;</span><span class="p">)</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="n">MAIL_USERNAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_USERNAME&quot;</span><span class="p">)</span>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="n">MAIL_PASSWORD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PASSWORD&quot;</span><span class="p">)</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="n">MAIL_FROM</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM&quot;</span><span class="p">)</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="n">MAIL_SERVER</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SERVER&quot;</span><span class="p">)</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="n">MAIL_FROM_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_FROM_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;Robux Republic&quot;</span><span class="p">)</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="n">MAIL_PORT</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_PORT&quot;</span><span class="p">,</span> <span class="mi">465</span><span class="p">))</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="n">MAIL_STARTTLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_STARTTLS&quot;</span><span class="p">,</span> <span class="s2">&quot;False&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="n">MAIL_SSL_TLS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;MAIL_SSL_TLS&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="n">USE_CREDENTIALS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;USE_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="n">VALIDATE_CERTS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VALIDATE_CERTS&quot;</span><span class="p">,</span> <span class="s2">&quot;True&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;true&quot;</span>
 </span></pre></div>
 
 
@@ -185,7 +185,7 @@
                 <section id="MAIL_USERNAME">
                     <div class="attr variable">
             <span class="name">MAIL_USERNAME</span>        =
-<span class="default_value">&#39;default&#39;</span>
+<span class="default_value">&#39;temp&#39;</span>
 
         
     </div>
@@ -197,7 +197,7 @@
                 <section id="MAIL_PASSWORD">
                     <div class="attr variable">
             <span class="name">MAIL_PASSWORD</span>        =
-<span class="default_value">&#39;default&#39;</span>
+<span class="default_value">&#39;temp&#39;</span>
 
         
     </div>
@@ -209,7 +209,7 @@
                 <section id="MAIL_FROM">
                     <div class="attr variable">
             <span class="name">MAIL_FROM</span>        =
-<span class="default_value">&#39;default@gmail.com&#39;</span>
+<span class="default_value">$MAIL_FROM</span>
 
         
     </div>
@@ -218,22 +218,10 @@
     
 
                 </section>
-                <section id="MAIL_PORT">
-                    <div class="attr variable">
-            <span class="name">MAIL_PORT</span>        =
-<span class="default_value">&#39;587&#39;</span>
-
-        
-    </div>
-    <a class="headerlink" href="#MAIL_PORT"></a>
-    
-    
-
-                </section>
                 <section id="MAIL_SERVER">
                     <div class="attr variable">
             <span class="name">MAIL_SERVER</span>        =
-<span class="default_value">&#39;default&#39;</span>
+<span class="default_value">$MAIL_SERVER</span>
 
         
     </div>
@@ -245,7 +233,7 @@
                 <section id="MAIL_FROM_NAME">
                     <div class="attr variable">
             <span class="name">MAIL_FROM_NAME</span>        =
-<span class="default_value">&#39;default&#39;</span>
+<span class="default_value">&#39;Robux Republic&#39;</span>
 
         
     </div>
@@ -254,10 +242,22 @@
     
 
                 </section>
+                <section id="MAIL_PORT">
+                    <div class="attr variable">
+            <span class="name">MAIL_PORT</span>        =
+<span class="default_value">465</span>
+
+        
+    </div>
+    <a class="headerlink" href="#MAIL_PORT"></a>
+    
+    
+
+                </section>
                 <section id="MAIL_STARTTLS">
                     <div class="attr variable">
             <span class="name">MAIL_STARTTLS</span>        =
-<span class="default_value">&#39;True&#39;</span>
+<span class="default_value">False</span>
 
         
     </div>
@@ -269,7 +269,7 @@
                 <section id="MAIL_SSL_TLS">
                     <div class="attr variable">
             <span class="name">MAIL_SSL_TLS</span>        =
-<span class="default_value">&#39;False&#39;</span>
+<span class="default_value">True</span>
 
         
     </div>
@@ -281,7 +281,7 @@
                 <section id="USE_CREDENTIALS">
                     <div class="attr variable">
             <span class="name">USE_CREDENTIALS</span>        =
-<span class="default_value">&#39;True&#39;</span>
+<span class="default_value">True</span>
 
         
     </div>
@@ -293,7 +293,7 @@
                 <section id="VALIDATE_CERTS">
                     <div class="attr variable">
             <span class="name">VALIDATE_CERTS</span>        =
-<span class="default_value">&#39;False&#39;</span>
+<span class="default_value">True</span>
 
         
     </div>
