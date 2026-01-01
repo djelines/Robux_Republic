@@ -92,7 +92,7 @@
 </span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a>        <span class="p">}</span>
 </span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a>
 </span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">bank_account_id</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">iban</span> <span class="o">=</span> <span class="n">generate_iban</span><span class="p">()</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">iban</span> <span class="o">=</span> <span class="n">generate_iban</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>
 </span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>    <span class="n">bank_account</span> <span class="o">=</span> <span class="n">Bank_Account_SQLModel</span><span class="p">(</span><span class="o">**</span><span class="n">body</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
 </span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">bank_account</span><span class="p">)</span>
@@ -203,7 +203,7 @@
 </span><span id="create_bank_account-25"><a href="#create_bank_account-25"><span class="linenos">25</span></a>        <span class="p">}</span>
 </span><span id="create_bank_account-26"><a href="#create_bank_account-26"><span class="linenos">26</span></a>
 </span><span id="create_bank_account-27"><a href="#create_bank_account-27"><span class="linenos">27</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">bank_account_id</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="create_bank_account-28"><a href="#create_bank_account-28"><span class="linenos">28</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">iban</span> <span class="o">=</span> <span class="n">generate_iban</span><span class="p">()</span>
+</span><span id="create_bank_account-28"><a href="#create_bank_account-28"><span class="linenos">28</span></a>    <span class="n">body</span><span class="o">.</span><span class="n">iban</span> <span class="o">=</span> <span class="n">generate_iban</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </span><span id="create_bank_account-29"><a href="#create_bank_account-29"><span class="linenos">29</span></a>
 </span><span id="create_bank_account-30"><a href="#create_bank_account-30"><span class="linenos">30</span></a>    <span class="n">bank_account</span> <span class="o">=</span> <span class="n">Bank_Account_SQLModel</span><span class="p">(</span><span class="o">**</span><span class="n">body</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
 </span><span id="create_bank_account-31"><a href="#create_bank_account-31"><span class="linenos">31</span></a>    <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">bank_account</span><span class="p">)</span>
