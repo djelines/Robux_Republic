@@ -23,7 +23,7 @@ def generate_uid() -> str:
 
 def generate_iban() -> str:
     """ Generate a pseudo-random IBAN for demonstration purposes."""
-    return "FR76" + str(uuid.uuid4().int)[:20] + "BanqueRepublic"  
+    return "FR76" + str(uuid.uuid4().int)[:20] + "REPUBLIC"  
 
 def hash_password(password: str) -> str:
     """ Hash a plain password using Passlib's CryptContext."""
