@@ -5,6 +5,7 @@ from app.models.models_create import Init_User
 from app.services import init_user
 from app.settings.schemas import Bank_Extern
 from app.settings.database import get_session
+from app.settings.config import BANK_NAME
 
 
 
@@ -14,7 +15,7 @@ def bank_extern_create(session : Session):
     if not bank_exist:
         bank_main = Bank_Extern(
             is_main=True,
-            name="Banque Republic",
+            name=BANK_NAME,
             iban="FR7612345678901234567890123BanqueRepublic",
             balance=999999999999.0
         )

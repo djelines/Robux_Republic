@@ -79,6 +79,9 @@ def get_name(session : Session = Depends(get_session)):
 
 def get_bank_id( session : Session = Depends(get_session) ):
     """ Get the bank ID from the bank name in config """
-    return session.query(Bank_Extern.id).filter(Bank_Extern.name == BANK_NAME).scalar()
+    bank_id = session.query(Bank_Extern.id).filter(Bank_Extern.name == BANK_NAME).scalar()
+    if bank_id is None:
+        raise HTTPException(status_code=500, detail=f"Bank '{BANK_NAME}' not found in database. Please check configuration.")
+    return bank_id
 
 
