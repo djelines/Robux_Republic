@@ -15,17 +15,17 @@ def bank_extern_create(session : Session):
     if not bank_exist:
         bank_main = Bank_Extern(
             is_main=True,
-            name=BANK_NAME,
-            iban="FR7612345678901234567890123BanqueRepublic",
-            balance=999999999999.0
+            name="Banque de France",
+            iban="FR76000000000000000000000CENTRAL",
+            balance=99999999.0
         )
         mega_bank = Bank_Extern(
             is_main=False,
-            name="Mega Bank",
-            iban="FR7612345678901234567890123MegaBank",
-            balance=100000000.0
+            name="TechCorp Payroll",
+            iban="FR7699998888777766665555CORP01",
+            balance=500000.0
 
-            ) 
+            )
         session.add(bank_main)
         session.add(mega_bank)
         session.commit()

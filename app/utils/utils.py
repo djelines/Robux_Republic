@@ -4,9 +4,10 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import jwt
 from passlib.context import CryptContext
 from starlette import status
+from sqlmodel import Session
 
 from app.settings.config import ALGORITHM, SECRET_KEY
-from app.settings.schemas import Auth
+from app.settings.schemas import Auth, Bank_Extern
 
 secret_key = SECRET_KEY
 algorithm = ALGORITHM
@@ -21,9 +22,19 @@ def generate_uid() -> str:
     """ Generate a unique identifier (UID) using UUID4."""
     return str(uuid.uuid4())
 
-def generate_iban() -> str:
-    """ Generate a pseudo-random IBAN for demonstration purposes."""
-    return "FR76" + str(uuid.uuid4().int)[:20] + "Banque Republic"  
+def generate_iban(session: Session) -> str:
+    """ Generate a pseudo-random IBAN for demonstration purposes using the main bank's suffix."""
+    # Get the main bank's IBAN to extract the suffix
+    main_bank = session.query(Bank_Extern).filter(Bank_Extern.is_main == True).first()
+
+    if main_bank and main_bank.iban:
+        # Extract the suffix from the main bank's IBAN (everything after FR76 + 20 digits)
+        suffix = main_bank.iban[24:]  # Skip "FR76" (4 chars) + 20 digits
+    else:
+        # Fallback to default suffix if no main bank found
+        suffix = "REPUBLIC"
+
+    return "FR76" + str(uuid.uuid4().int)[:20] + suffix  
 
 def hash_password(password: str) -> str:
     """ Hash a plain password using Passlib's CryptContext."""

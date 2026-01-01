@@ -24,7 +24,7 @@ def create_bank_account(body: Bank_Account_create, get_user: get_user, session=D
         }
 
     body.bank_account_id = None
-    body.iban = generate_iban()
+    body.iban = generate_iban(session)
 
     bank_account = Bank_Account_SQLModel(**body.model_dump())
     session.add(bank_account)
