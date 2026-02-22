@@ -1,100 +1,86 @@
-#!/usr/bin/env python3
 """
-CLI script to create a user account.
-Usage: python -m scripts.create_user
-       (or: python scripts/create_user.py)
-
-Never use the public /auth/signup endpoint in production.
+CLI script to create a user with a principal bank account.
+Usage (from backend/Robux_Republic/):
+    python -m scripts.create_user
 """
 import getpass
 import sys
-import uuid
-
-# Ensure the project root is on sys.path when run as a script
 import os
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.settings.database import get_session, create_db_and_tables
-from app.settings.schemas import Auth, User
-from app.services.bank_account import create_bank_account as _create_bank_account
-from app.utils.utils import hash_password
+from app.services.seeders import bank_extern_create
+from app.models.models_create import Auth_create, Bank_Account_create, Init_User
+from app.services.init_user import init_user
+from app.settings.schemas import Auth
 
 
-def create_user_cli():
-    print("=== Création d'un compte utilisateur ===")
-    print()
+def main():
+    print("=== Création d'un nouvel utilisateur ===\n")
 
-    # Collect input
-    first_name = input("Prénom : ").strip()
-    if not first_name:
-        print("Erreur : le prénom est requis.", file=sys.stderr)
+    first_name = input("Prénom       : ").strip()
+    last_name   = input("Nom          : ").strip()
+    address     = input("Adresse      : ").strip()
+    email       = input("Email        : ").strip().lower()
+    password    = getpass.getpass("Mot de passe : ")
+    confirm     = getpass.getpass("Confirmer    : ")
+
+    if not all([first_name, last_name, email, password]):
+        print("\n[ERREUR] Tous les champs obligatoires doivent être remplis.")
         sys.exit(1)
 
-    last_name = input("Nom : ").strip()
-    if not last_name:
-        print("Erreur : le nom est requis.", file=sys.stderr)
+    if "@" not in email:
+        print("\n[ERREUR] Email invalide.")
         sys.exit(1)
 
-    address = input("Adresse : ").strip()
-
-    email = input("Email : ").strip().lower()
-    if not email or "@" not in email:
-        print("Erreur : email invalide.", file=sys.stderr)
-        sys.exit(1)
-
-    password = getpass.getpass("Mot de passe : ")
     if len(password) < 8:
-        print("Erreur : le mot de passe doit contenir au moins 8 caractères.", file=sys.stderr)
+        print("\n[ERREUR] Le mot de passe doit contenir au moins 8 caractères.")
         sys.exit(1)
 
-    password_confirm = getpass.getpass("Confirmer le mot de passe : ")
-    if password != password_confirm:
-        print("Erreur : les mots de passe ne correspondent pas.", file=sys.stderr)
+    if password != confirm:
+        print("\n[ERREUR] Les mots de passe ne correspondent pas.")
         sys.exit(1)
 
-    # Init DB
     create_db_and_tables()
     session = next(get_session())
 
     try:
-        # Check email uniqueness
         existing = session.query(Auth).filter(Auth.email == email).first()
         if existing:
-            print(f"Erreur : l'email {email} est déjà utilisé.", file=sys.stderr)
+            print(f"\n[ERREUR] L'email {email} est déjà utilisé.")
             sys.exit(1)
 
-        uid = str(uuid.uuid4())
+        bank_extern_create(session)
 
-        new_user = User(
-            uid=uid,
-            first_name=first_name,
-            last_name=last_name,
-            address=address,
+        body = Init_User(
+            auth=Auth_create(
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                address=address,
+            ),
+            bank_account=Bank_Account_create(),
         )
-        session.add(new_user)
-        session.flush()
 
-        new_auth = Auth(
-            uid=uid,
-            email=email,
-            password=hash_password(password),
-        )
-        session.add(new_auth)
-        session.commit()
+        result = init_user(body, session)
+        user    = result["user"]
+        account = result["bank_account"]
 
-        print()
-        print(f"✅ Utilisateur créé avec succès.")
-        print(f"   UID   : {uid}")
-        print(f"   Email : {email}")
-        print(f"   Nom   : {first_name} {last_name}")
+        print(f"\n[OK] Utilisateur créé :")
+        print(f"     UID   : {user.uid}")
+        print(f"     Email : {email}")
+        print(f"     IBAN  : {account.iban}")
+        print(f"     Solde : {account.balance} €")
 
     except Exception as e:
         session.rollback()
-        print(f"Erreur lors de la création : {e}", file=sys.stderr)
+        print(f"\n[ERREUR] {e}")
         sys.exit(1)
     finally:
         session.close()
 
 
 if __name__ == "__main__":
-    create_user_cli()
+    main()
