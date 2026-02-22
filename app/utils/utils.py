@@ -16,7 +16,7 @@ algorithm = ALGORITHM
 COOKIE_NAME = "access_token"
 TOKEN_EXPIRE_DAYS = 7
 
-pdw_context = CryptContext(schemes=["bcrypt"], bcrypt__rounds=12, deprecated="auto")
+pdw_context = CryptContext(schemes=["bcrypt", "sha256_crypt"], bcrypt__rounds=12, deprecated=["sha256_crypt"])
 
 
 def generate_uid() -> str:

@@ -71,12 +71,20 @@ def on_startup():
     bank_extern_create(session)
 
 # ── Global error handler ──────────────────────────────────────────────────────
+ALLOWED_ORIGINS = ["https://banque-republic.micdev.fr", "http://localhost:5173"]
+
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     if not IS_PROD:
         import traceback
         traceback.print_exc()
+    origin = request.headers.get("origin", "")
+    headers = {}
+    if origin in ALLOWED_ORIGINS:
+        headers["Access-Control-Allow-Origin"] = origin
+        headers["Access-Control-Allow-Credentials"] = "true"
     return JSONResponse(
         status_code=500,
         content={"error": "Erreur interne du serveur"},
+        headers=headers,
     )
