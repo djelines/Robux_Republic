@@ -46,6 +46,9 @@
                     <a class="function" href="#on_startup">on_startup</a>
             </li>
             <li>
+                    <a class="variable" href="#ALLOWED_ORIGINS">ALLOWED_ORIGINS</a>
+            </li>
+            <li>
                     <a class="function" href="#global_exception_handler">global_exception_handler</a>
             </li>
     </ul>
@@ -142,15 +145,23 @@
 </span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>    <span class="n">bank_extern_create</span><span class="p">(</span><span class="n">session</span><span class="p">)</span>
 </span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
 </span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="c1"># ── Global error handler ──────────────────────────────────────────────────────</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="ne">Exception</span><span class="p">)</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">global_exception_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">IS_PROD</span><span class="p">:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Erreur interne du serveur&quot;</span><span class="p">},</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="p">)</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="n">ALLOWED_ORIGINS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;https://banque-republic.micdev.fr&quot;</span><span class="p">,</span> <span class="s2">&quot;http://localhost:5173&quot;</span><span class="p">]</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="ne">Exception</span><span class="p">)</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">global_exception_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">IS_PROD</span><span class="p">:</span>
+</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="n">origin</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>    <span class="k">if</span> <span class="n">origin</span> <span class="ow">in</span> <span class="n">ALLOWED_ORIGINS</span><span class="p">:</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Credentials&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>        <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos">88</span></a>        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Erreur interne du serveur&quot;</span><span class="p">},</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos">89</span></a>        <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos">90</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
@@ -257,6 +268,18 @@
     
 
                 </section>
+                <section id="ALLOWED_ORIGINS">
+                    <div class="attr variable">
+            <span class="name">ALLOWED_ORIGINS</span>        =
+<span class="default_value">[&#39;https://banque-republic.micdev.fr&#39;, &#39;http://localhost:5173&#39;]</span>
+
+        
+    </div>
+    <a class="headerlink" href="#ALLOWED_ORIGINS"></a>
+    
+    
+
+                </section>
                 <section id="global_exception_handler">
                             <input id="global_exception_handler-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
@@ -269,15 +292,21 @@
 
     </div>
     <a class="headerlink" href="#global_exception_handler"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="global_exception_handler-75"><a href="#global_exception_handler-75"><span class="linenos">75</span></a><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="ne">Exception</span><span class="p">)</span>
-</span><span id="global_exception_handler-76"><a href="#global_exception_handler-76"><span class="linenos">76</span></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">global_exception_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
-</span><span id="global_exception_handler-77"><a href="#global_exception_handler-77"><span class="linenos">77</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">IS_PROD</span><span class="p">:</span>
-</span><span id="global_exception_handler-78"><a href="#global_exception_handler-78"><span class="linenos">78</span></a>        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
-</span><span id="global_exception_handler-79"><a href="#global_exception_handler-79"><span class="linenos">79</span></a>        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
-</span><span id="global_exception_handler-80"><a href="#global_exception_handler-80"><span class="linenos">80</span></a>    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
-</span><span id="global_exception_handler-81"><a href="#global_exception_handler-81"><span class="linenos">81</span></a>        <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-</span><span id="global_exception_handler-82"><a href="#global_exception_handler-82"><span class="linenos">82</span></a>        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Erreur interne du serveur&quot;</span><span class="p">},</span>
-</span><span id="global_exception_handler-83"><a href="#global_exception_handler-83"><span class="linenos">83</span></a>    <span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="global_exception_handler-77"><a href="#global_exception_handler-77"><span class="linenos">77</span></a><span class="nd">@app</span><span class="o">.</span><span class="n">exception_handler</span><span class="p">(</span><span class="ne">Exception</span><span class="p">)</span>
+</span><span id="global_exception_handler-78"><a href="#global_exception_handler-78"><span class="linenos">78</span></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">global_exception_handler</span><span class="p">(</span><span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">,</span> <span class="n">exc</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">):</span>
+</span><span id="global_exception_handler-79"><a href="#global_exception_handler-79"><span class="linenos">79</span></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">IS_PROD</span><span class="p">:</span>
+</span><span id="global_exception_handler-80"><a href="#global_exception_handler-80"><span class="linenos">80</span></a>        <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
+</span><span id="global_exception_handler-81"><a href="#global_exception_handler-81"><span class="linenos">81</span></a>        <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+</span><span id="global_exception_handler-82"><a href="#global_exception_handler-82"><span class="linenos">82</span></a>    <span class="n">origin</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</span><span id="global_exception_handler-83"><a href="#global_exception_handler-83"><span class="linenos">83</span></a>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
+</span><span id="global_exception_handler-84"><a href="#global_exception_handler-84"><span class="linenos">84</span></a>    <span class="k">if</span> <span class="n">origin</span> <span class="ow">in</span> <span class="n">ALLOWED_ORIGINS</span><span class="p">:</span>
+</span><span id="global_exception_handler-85"><a href="#global_exception_handler-85"><span class="linenos">85</span></a>        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">origin</span>
+</span><span id="global_exception_handler-86"><a href="#global_exception_handler-86"><span class="linenos">86</span></a>        <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Access-Control-Allow-Credentials&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+</span><span id="global_exception_handler-87"><a href="#global_exception_handler-87"><span class="linenos">87</span></a>    <span class="k">return</span> <span class="n">JSONResponse</span><span class="p">(</span>
+</span><span id="global_exception_handler-88"><a href="#global_exception_handler-88"><span class="linenos">88</span></a>        <span class="n">status_code</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+</span><span id="global_exception_handler-89"><a href="#global_exception_handler-89"><span class="linenos">89</span></a>        <span class="n">content</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Erreur interne du serveur&quot;</span><span class="p">},</span>
+</span><span id="global_exception_handler-90"><a href="#global_exception_handler-90"><span class="linenos">90</span></a>        <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
+</span><span id="global_exception_handler-91"><a href="#global_exception_handler-91"><span class="linenos">91</span></a>    <span class="p">)</span>
 </span></pre></div>
 
 
