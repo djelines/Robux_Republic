@@ -1,12 +1,8 @@
 import os
-import sys
 from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    print("FATAL: SECRET_KEY manquant", file=sys.stderr)
-    sys.exit(1)
 
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
 DB_NAME = os.getenv("DB_NAME" ,"database.db")

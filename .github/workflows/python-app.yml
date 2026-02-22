@@ -20,9 +20,14 @@ jobs:
           pip install flake8 pytest pdoc
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run Tests
+        env:
+          SECRET_KEY: "ci-test-key-not-for-production"
+          ALGORITHM: "HS256"
         run: pytest
       - name: Generate Doc
         env:
+            SECRET_KEY: "ci-test-key-not-for-production"
+            ALGORITHM: "HS256"
             MAIL_USERNAME: "temp"
             MAIL_PASSWORD: "temp"
             MAIL_SERVER: "localhost"
