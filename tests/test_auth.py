@@ -7,12 +7,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from fastapi.responses import Response
 from app.settings.schemas import Auth
 from app.models.models import get_db_engine
 from app.settings.database import SQLModel
-from passlib.context import CryptContext
-
-pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+from app.utils.utils import hash_password
 
 @pytest.fixture()
 def test_db_session():
@@ -33,7 +32,7 @@ def test_db_session():
 
 @pytest.fixture()
 def test_user(test_db_session):
-    hashed_password = pwd_context.hash("testpassword")
+    hashed_password = hash_password("testpassword")
 
     user = Auth(
         uid="testuid",
@@ -53,7 +52,8 @@ def test_login_success(test_db_session, test_user):
     user = login(
         test_user.email,
         "testpassword",
-        test_db_session
+        test_db_session,
+        Response()
     )
     assert user is not None , "Login failed when it should have succeeded"
 
