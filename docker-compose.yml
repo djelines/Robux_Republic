@@ -7,8 +7,24 @@ services:
       - "6682:8000"
     env_file:
       - .env
-    environment:
-      - DATABASE_URL=postgresql://mit:Mit6666.@172.18.0.2:5432/robux_republic_db
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    user: "1001:1001"
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "python", "-c",
+        "import urllib.request; r = urllib.request.urlopen('http://localhost:8000/health'); exit(0 if r.status == 200 else 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
@@ -20,19 +36,21 @@ services:
     command: python -m app.schelduler.finalize_transaction
     restart: always
     env_file: .env
-    environment:
-      - DATABASE_URL=postgresql://mit:Mit6666.@172.18.0.2:5432/robux_republic_db
+    security_opt:
+      - no-new-privileges:true
+    user: "1001:1001"
     networks:
       - reseau_partage
-    
+
   mail_send:
     build: ./
     container_name: mail_send
     command: python -m app.schelduler.mail_send
     restart: always
     env_file: .env
-    environment:
-      - DATABASE_URL=postgresql://mit:Mit6666.@172.18.0.2:5432/robux_republic_db
+    security_opt:
+      - no-new-privileges:true
+    user: "1001:1001"
     networks:
       - reseau_partage
 
@@ -42,8 +60,9 @@ services:
     command: python -m app.schelduler.ceiling_account
     restart: always
     env_file: .env
-    environment:
-      - DATABASE_URL=postgresql://mit:Mit6666.@172.18.0.2:5432/robux_republic_db  
+    security_opt:
+      - no-new-privileges:true
+    user: "1001:1001"
     networks:
       - reseau_partage
 

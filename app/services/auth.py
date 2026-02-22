@@ -1,17 +1,20 @@
-from sentry_sdk import session
+from datetime import datetime, timedelta, timezone
+
 from starlette import status
 from sqlmodel import select
 
 from app.models.models_create import Auth_create
 from app.services.user import create_user
 from app.settings import schemas
-from app.settings import schemas
-from app.settings.config import ALGORITHM, SECRET_KEY
+from app.settings.config import ALGORITHM, SECRET_KEY, IS_PROD
 from app.settings.database import get_session
-from app.utils.utils import *
+from app.utils.utils import (
+    generate_uid, hash_password, verify_password, get_user, pdw_context,
+    COOKIE_NAME, TOKEN_EXPIRE_DAYS
+)
 import jwt
-from fastapi import Depends, HTTPException
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+import uuid
+from fastapi import Depends, HTTPException, Response
 from app.models.models import User, Auth
 from app.settings.schemas import Auth, User
 
@@ -59,18 +62,49 @@ def create_auth(body: Auth_create, session = Depends(get_session)) -> dict:
 ######################
 #     Log in
 ####################
-def generate_token(auth: Auth):
-    """ Generate a JWT token """
-    payload = {"uid": auth.uid, "email": auth.email}
-    return jwt.encode(payload, secret_key, algorithm=algorithm)
+def generate_token(auth: Auth) -> str:
+    """ Generate a JWT token with expiry """
+    exp = datetime.now(timezone.utc) + timedelta(days=TOKEN_EXPIRE_DAYS)
+    payload = {"uid": auth.uid, "email": auth.email, "exp": exp}
+    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-def login(email: str, password: str, session):
-    """ Login a user """
+def login(email: str, password: str, session, response: Response):
+    """ Login a user — sets httpOnly cookie """
     auth_user = session.query(Auth).filter(Auth.email == email).first()
     if not auth_user or not verify_password(password, auth_user.password):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Email or password incorrect")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Email ou mot de passe incorrect",
+        )
 
-    return {"token": generate_token(auth_user)}
+    token = generate_token(auth_user)
+    response.set_cookie(
+        key=COOKIE_NAME,
+        value=token,
+        httponly=True,
+        samesite="strict",
+        secure=IS_PROD,
+        max_age=TOKEN_EXPIRE_DAYS * 86400,
+    )
+
+    db_user = session.query(User).filter(User.uid == auth_user.uid).first()
+    return {
+        "uid": auth_user.uid,
+        "email": auth_user.email,
+        "first_name": db_user.first_name if db_user else None,
+        "last_name": db_user.last_name if db_user else None,
+        "address": db_user.address if db_user else None,
+    }
+
+def logout(response: Response):
+    """ Clear the auth cookie """
+    response.delete_cookie(
+        key=COOKIE_NAME,
+        httponly=True,
+        samesite="strict",
+        secure=IS_PROD,
+    )
+    return {"message": "Déconnecté"}
 
 
 ######################

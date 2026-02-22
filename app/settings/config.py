@@ -1,12 +1,18 @@
 import os
+import sys
 from dotenv import load_dotenv
 load_dotenv()
 
-DB_NAME = os.getenv("DB_NAME" ,"database.db")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    print("FATAL: SECRET_KEY manquant", file=sys.stderr)
+    sys.exit(1)
+
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-SECRET_KEY = os.getenv("SECRET_KEY" ,"default_secret_key")
+DB_NAME = os.getenv("DB_NAME" ,"database.db")
 BANK_NAME = os.getenv("BANK_NAME" ,"Robux")
-CEILING_ACCOUNT = os.getenv("CEILING_ACCOUNT", 50000)
+IS_PROD = os.getenv("IS_PROD", "false").lower() == "true"
+CEILING_ACCOUNT = int(os.getenv("CEILING_ACCOUNT", 50000))
 
 MAIL_USERNAME = os.getenv("MAIL_USERNAME")
 MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
